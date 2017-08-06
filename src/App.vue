@@ -1,6 +1,6 @@
 <template>
   <div id="myApp">
-      <header-content></header-content>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -10,7 +10,7 @@ import headerContent from './components/header/header';
 export default {
   name:'app',
    components:{
-     headerContent
+    //  headerContent
    }
 }
 </script>
