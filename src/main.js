@@ -5,6 +5,8 @@ import App from './App';
 import router from './router';
 import FastClick from 'fastclick';
 import store from './store/';
+import vueResource from 'vue-resource';
+import mockjs from "./server/mock";
 if ('addEventListener' in document) {
     document.addEventListener('DOMContentLoaded', function() {
         FastClick.attach(document.body);
@@ -18,7 +20,7 @@ if ('addEventListener' in document) {
   document.getElementById('viewport').setAttribute('content', 'target-densitydpi=device-dpi,width=750,user-scalable=no,initial-scale=' +val +',minimum-scale=' +val +', maximum-scale=' +val+'');
   })();
 Vue.config.productionTip = false
-
+Vue.use(vueResource);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
