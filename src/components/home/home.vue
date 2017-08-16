@@ -41,6 +41,7 @@ thead, tr, th, td ,i,span,img{
   font-size: 100%;
   font-family: HelveticaNeue !important;
   vertical-align: baseline;
+  list-style: none;
 }
 .home{
   display: flex;

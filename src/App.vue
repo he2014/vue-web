@@ -15,13 +15,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #myApp {
   width: 750px;
   overflow:hidden;
 }
-html,body{
-  margin: 0;
-  padding: 0;
-}
+
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="headerContaner">
-       {{msg}}
+       <img src="../../assets/img/7nujoom.png"/>
      </div>
   </div>
 </template>
@@ -19,12 +19,16 @@ export default {
 <style  scoped>
      .header{
        width: 750px;
-       height: 100px;
+       height: 88px;
        display: flex;
        justify-content: center;
        align-items: center;
        text-align: center;
        font-size: 68px;
-       background: rgba(0, 0, 0, 0.5);
+     }
+     .headerContaner{
+       display: flex;
+       justify-content: center;
+       align-items: flex-end;
      }
 </style>
