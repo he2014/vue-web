@@ -11,11 +11,21 @@
               <img src="../../assets/img/more2x.png"/>
             </div>
           </div>
-          <ul>
-              <li v-for="(item,index) in list" :key='index'>
-                  <img v-bind:src="item['pic']"/>
-              </li>
-          </ul>
+          <div class="ul">
+              <p v-for="(item,index) in list" :key='index'>
+                  <img class="poster" v-bind:src="item['pic']"/>
+                  <span class="isOnline" v-if="item['isOnline']">
+                       <em class="onLive" v-if="item['isHot']">
+                          <i><img src="../../assets/img/live.gif" /></i>
+                          <b><span>{{item['num']}}</span></b>
+                       </em>
+                       <i class="onLive" v-else>
+                         <em><img src="../../assets/img/live.gif" /></em>
+                         <b><span>{{item['num']}}</span></b>
+                       </i>
+                  </span>
+              </p>
+          </div>
     </div>
     <div class="video">
           <div class="video-title">
@@ -28,11 +38,14 @@
               <img src="../../assets/img/more2x.png"/>
             </div>
           </div>
-          <ul>
-              <li v-for="(item,index) in videoList" :key='index'>
+          <div class="ul">
+              <p v-for="(item,index) in videoList" :key='index'>
                   <img v-bind:src="item['pic']"/>
-              </li>
-          </ul>
+                  <span class="online">
+                     <i>{{item["num"]}}</i>
+                  </span>
+              </p>
+          </div>
     </div>
     <div class="chat">
           <div class="chat-title">
@@ -45,11 +58,20 @@
               <img src="../../assets/img/more2x.png"/>
             </div>
           </div>
-          <ul>
-              <li v-for="(item,index) in chatList" :key='index'>
+          <div class="ul">
+              <p v-for="(item,index) in chatList" :key='index'>
+                <span class="chatContent">
                   <img v-bind:src="item['pic']"/>
-              </li>
-          </ul>
+                </span>
+                  <b class="num">
+                    <span>{{item['name']}}</span>
+                    <em>
+                      <img src="../../assets/img/icon_usercount_02@2x.png" />
+                      <i>{{item['num']}}</i>
+                    </em>
+                  </b>
+              </p>
+          </div>
     </div>
   </div>
 </template>
@@ -78,14 +100,14 @@ mounted() {
          if(list['code']==0){
            this.videoList = list['dataInfo'];
            console.log(promise)
-           resolve();
+          // resolve();
          }
      }.bind(this))
   }.bind(this)).then(function(resolve,reject){
     this.$http.get("/chat/index").then(function(data){
       let list = data['body'];
       if(list['code']==0){
-        this.chaList = list['dataInfo'];
+        this.chatList = list['dataInfo'];
         //resolve()
         //console.log(this.videoList)
       }
@@ -156,42 +178,158 @@ mounted() {
       font-size: 30px;
       color: #B2B2B2;
     }
-  .live ul,
-  .video ul{
+  .live .ul,
+  .video .ul{
     width: 750px;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
   }
-  .live ul li{
+  .live .ul p{
+    position: relative;
     width: 374px;
     height: 375px;
   }
-  .live ul li:nth-child(2n){
+  .live .ul p:nth-child(2n){
     width: 375px;
   }
-  .live ul img,.video ul img{
+  .live .ul .poster,.video .ul img{
     width: 100%;
     height: 100%;
   }
-  .live ul li{
+  .live .ul p{
     margin-bottom: 1px;
   }
+.live .isOnline{
+  position: absolute;
+  top:40px;
+  left: 12px;
+}
+.live .isOnline .onLive{
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+}
+.live .isOnline .onLive em,
+.live .isOnline .onLive i{
+  width: 106px;
+  height: 52px;
+}
+.live .isOnline .onLive em{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background: url("../../assets/img/LIVE_small2x.png") left -12px no-repeat;
+}
+.live .isOnline .onLive i{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background: url("../../assets/img/HOT_small2x.png") left center no-repeat;
+}
+.live .isOnline .onLive em img,
+.live .isOnline .onLive i img{
+  width: 30px;
+  margin:0 0 5px 15px;
+}
+.live .isOnline .onLive i img{
+  margin-top: 27px;
+}
+.live .isOnline em.onLive b{
+  position: relative;
+  top:15px;
+  left: -8px;
+}
+.live .isOnline .onLive b{
+  position: relative;
+  top:3px;
+  left: -8px;
+  min-width: 63px;
+  height: 34px;
+  line-height: 34px;
+  text-align: right;
+  margin-top:11px;
+  background: url("../../assets/img/Rectangle@2x.png") left center no-repeat;
+  background-size: 100%;
 
+  font-family: DINCondensed-Bold;
+font-size: 26px;
+color: #fff;
+  padding-right: 15px;
+  border-radius: 0 10px 10px 0;
+}
+.live .isOnline .onLive b span{
+  padding-left: 50px;
+  background: url('../../assets/img/huiu@2x.png') 20px center no-repeat;
+}
 .video{
   width: 750px;
   height: 689px;
   overflow: hidden;
 }
-.video ul li {
+.video .ul p {
+  position: relative;
   width: 249px;
   height: 300px;
   margin-bottom: 1px;
   margin-right: 1px;
 }
-.video ul li:nth-child(3n){
+.video .ul p:nth-child(3n){
   margin:0;
   width: 250px;
+}
+.video .ul p .online{
+  position: absolute;
+  bottom: 10px;
+  left:16px;
+  font-size: 26px;
+  color:white;
+  padding-left: 30px;
+  background: url("../../assets/img/huiu@2x.png") left center no-repeat;
+}
+.chat .ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.chat .ul p{
+  width: 750px;
+  height: 140px;
+  display: flex;
+  justify-content: space-between;
+}
+.chat .ul p .chatContent img{
+  width: 120px;
+  height: 120px;
+
+}
+.chat .chatContent {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 20px;
+}
+.chat .num{
+  width: 590px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 32px;
+  color: #292929;
+  border-bottom: 2px solid #eee;
+}
+.chat .num em{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 26px;
+  color: #999999
+
+}
+.chat .num em i{
+  padding: 0 20px 0 0;
+
 }
 
 </style>

@@ -30,7 +30,7 @@ h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address,
 big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend, table, caption, tbody, tfoot,
-thead, tr, th, td ,i,span,img{
+thead, tr, th, td ,i,span,img,b{
   margin: 0;
   padding: 0;
   border: 0;

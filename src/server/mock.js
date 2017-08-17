@@ -11,7 +11,8 @@ const produceNewsData = function() {
       roomID: Random.natural(10000,99999),
       pic: Random.dataImage('374x375', 'live'),
       name: Random.word(10,20),
-      num: Random.natural(1000,5999)
+      num: Random.natural(1000,5999),
+      isHot:Random.boolean(5,5, false)
     };
     dataInfo.push(newArticleObject);
   };
@@ -45,8 +46,9 @@ const chatData = function(){
       let newArticleObject = {
         title: "chat",
         isOnline:Random.boolean(1,7, false),
+
         roomID: Random.natural(10000,99999),
-        pic: Random.dataImage('252x300', 'video'),
+        pic: Random.dataImage('252x300', 'chat'),
         name: Random.word(10,20),
         num: Random.natural(1000,5999)
       };
