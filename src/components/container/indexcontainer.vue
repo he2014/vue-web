@@ -12,7 +12,7 @@
             </div>
           </div>
           <div class="ul">
-              <p v-for="(item,index) in list" :key='index'>
+              <router-link tag="p" :to="{path:'live',query:{ sf:item['roomID']}}" v-for="(item,index) in list" :key='index'>
                   <img class="poster" v-bind:src="item['pic']"/>
                   <span class="isOnline" v-if="item['isOnline']">
                        <em class="onLive" v-if="item['isHot']">
@@ -23,8 +23,8 @@
                          <em><img src="../../assets/img/live.gif" /></em>
                          <b><span>{{item['num']}}</span></b>
                        </i>
-                  </span>
-              </p>
+            </span>
+              </router-link>
           </div>
     </div>
     <div class="video">
@@ -87,23 +87,21 @@ export default {
         state:null
   }),
 mounted() {
-  var promise = new Promise(function(resolve,reject){
+  //let new Promise(function(resolve,reject){
       this.$http.get("/news/index").then(function(res){
         let data = res['body'];
         if(data['code']==0)
          this.list = data['dataInfo'];
-         resolve();
+          //resolve();
       }.bind(this))
-  }.bind(this)).then(function(resolve,reject){
+  // }.bind(this)).then(function(){
      this.$http.get("/video/index").then(function(data){
          let list = data['body'];
          if(list['code']==0){
            this.videoList = list['dataInfo'];
-           console.log(promise)
-          // resolve();
          }
      }.bind(this))
-  }.bind(this)).then(function(resolve,reject){
+//  }.bind(this)).then(function(){
     this.$http.get("/chat/index").then(function(data){
       let list = data['body'];
       if(list['code']==0){
@@ -112,10 +110,10 @@ mounted() {
         //console.log(this.videoList)
       }
     }.bind(this))
-  }.bind(this))
-  //do something after mounting vue instance
-
-}
+  // }.bind(this))
+//   //do something after mounting vue instance
+//
+ }
 
 }
 </script>

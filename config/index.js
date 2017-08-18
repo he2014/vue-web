@@ -23,7 +23,7 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 4444,
+    port: 3333,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
@@ -41,7 +41,7 @@ module.exports = {
               pathRewriteL:{
                   '^/service':''
               }
-          
+
             }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"

@@ -1,7 +1,7 @@
 <template>
   <div id="" class="home">
       <header-content></header-content>
-      <container></container>
+      <router-view ></router-view>
       <footers></footers>
   </div>
 </template>
@@ -18,31 +18,13 @@ export default {
   },
   components: {
     headerContent,
-    container,
+    // container,
     footers
   }
 
 }
 </script>
-<style >
-html, body, div, span, applet, object, iframe, h1, h2, h3,
-h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address,
-big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend, table, caption, tbody, tfoot,
-thead, tr, th, td ,i,span,img,b{
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: 0;
-  direction: inherit;
-  font-weight: inherit;
-  font-style: normal;
-  font-size: 100%;
-  font-family: HelveticaNeue !important;
-  vertical-align: baseline;
-  list-style: none;
-}
+<style scoped >
 .home{
   display: flex;
   flex-direction: column;
