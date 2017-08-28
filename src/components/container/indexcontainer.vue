@@ -87,33 +87,29 @@ export default {
         state:null
   }),
 mounted() {
-  //let new Promise(function(resolve,reject){
       this.$http.get("/news/index").then(function(res){
         let data = res['body'];
         if(data['code']==0)
          this.list = data['dataInfo'];
-          //resolve();
       }.bind(this))
-  // }.bind(this)).then(function(){
      this.$http.get("/video/index").then(function(data){
          let list = data['body'];
          if(list['code']==0){
            this.videoList = list['dataInfo'];
          }
      }.bind(this))
-//  }.bind(this)).then(function(){
+
     this.$http.get("/chat/index").then(function(data){
       let list = data['body'];
       if(list['code']==0){
         this.chatList = list['dataInfo'];
-        //resolve()
-        //console.log(this.videoList)
       }
     }.bind(this))
-  // }.bind(this))
+
 //   //do something after mounting vue instance
 //
- }
+ },
+
 
 }
 </script>

@@ -7,7 +7,7 @@ import FastClick from 'fastclick';
 import store from './store/';
 import vueResource from 'vue-resource';
 import Es6Promise from 'es6-promise';
-import mockjs from "./server/mock";
+import mockjs from "../mock/mock.js";
 Es6Promise.polyfill();
 if ('addEventListener' in document) {
     document.addEventListener('DOMContentLoaded', function() {

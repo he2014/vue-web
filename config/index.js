@@ -23,27 +23,43 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 3333,
+    port: 4444,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {//http://www.7najm.com/data/static/v4/?badge&r=6899
-            '/data':{
-              target:"http://www.7najm.com",
-              changeOrigin:true,
-              pathRewriteL:{
-                  '^/data':''
-              }
-            },
-            "/service":{
-              target:"http://www.7najm.com",
-              changeOrigin:true,
-              pathRewriteL:{
-                  '^/service':''
-              }
+      context: [ //代理路径
+            "/news",
+            '/video',
+            '/chat'
+        ],
+        proxypath: 'http://127.0.0.1:3333',
 
-            }
-    },
+    //    代理方法2
+    // proxyTable: {//http://www.7najm.com/data/static/v4/?badge&r=6899
+    //         '/news':{
+    //           target:"http://127.0.0.1:3333",
+    //           changeOrigin:true,
+    //           pathRewriteL:{
+    //               '^/news':''
+    //           }
+    //         },
+    //         "/video":{
+    //           target:"http://127.0.0.1:3333",
+    //           changeOrigin:true,
+    //           pathRewriteL:{
+    //               '^/video':''
+    //           }
+    //
+    //         },
+    //         "/chat":{
+    //           target:"http://127.0.0.1:3333",
+    //           changeOrigin:true,
+    //           pathRewriteL:{
+    //               '^/chat':''
+    //           }
+    //
+    //         }
+    // },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)
