@@ -18,11 +18,7 @@ export default {
   created() {
       this.$store.dispatch("setDevice",common['device']());
     //do something after creating vue instance
-  },
-  mounted() {
-    //do something after mounting vue instance
-    console.log(this.$store.getters.getDevice)
-  },
+  }
 
 
 }

@@ -6,7 +6,7 @@
             <img src="../../assets/img/logo@2x.png" />
             <img src="../../assets/img/7nujoom@2x.png"/>
           </div>
-          <div class="footerRight">
+          <div class="footerRight" @click="showpop">
             <img src="../../assets/img/down@2x.png" />
           </div>
       </div>
@@ -18,7 +18,12 @@ export default {
   name: "footer",
   data: () => ({
     message:"footer"
-  })
+  }),
+  methods: {
+    showpop() {
+      this.$store.dispatch('setShow',true);
+    }
+  }
 }
 </script>
 <style  scoped>

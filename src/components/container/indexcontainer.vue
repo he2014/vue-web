@@ -7,7 +7,7 @@
                <span>Live</span>
             </div>
             <div class="live-titleRight">
-              <span>more</span>
+              <span @click="showPop">more</span>
               <img src="../../assets/img/more2x.png"/>
             </div>
           </div>
@@ -34,7 +34,7 @@
                <span>Video</span>
             </div>
             <div class="video-titleRight">
-              <span>more</span>
+              <span @click="showPop">more</span>
               <img src="../../assets/img/more2x.png"/>
             </div>
           </div>
@@ -54,7 +54,7 @@
                <span>Chat</span>
             </div>
             <div class="chat-titleRight">
-              <span>more</span>
+              <span @click="showPop">more</span>
               <img src="../../assets/img/more2x.png"/>
             </div>
           </div>
@@ -109,6 +109,11 @@ mounted() {
 //   //do something after mounting vue instance
 //
  },
+ methods:{
+   showPop(){
+     this.$store.dispatch("setShow",true);
+   }
+ }
 
 
 }

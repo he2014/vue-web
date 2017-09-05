@@ -1,5 +1,5 @@
 <template>
-  <div class="downloadPop">
+  <div class="downloadPop" @click="hidepop">
     <div class="downloadMain">
        <div class="downloadMainTop">
            <img src="../../assets/img/downLOGO.png" alt="">
@@ -25,7 +25,8 @@ export default {
     nolive:"This Broadcaster is not online now, but there is more fun waiting for you. Download the APP now!",
     message:"More Awesomeness is waiting for you, just press the link and download 7nujoom!",
     type:false,
-    isDevice:""
+    isDevice:"",
+    oHeight:""
   }),
   created() {
     //do something after creating vue instance
@@ -33,9 +34,9 @@ export default {
       this.type=true;
     }
     this.isDevice = this.$store.getters.getDevice;
-
-    //console.log(this.$store.getters.getDevice)
   },
+
+
   methods: {
     androidDown(){
       common['download'](1);
@@ -46,13 +47,17 @@ export default {
 
     androidInstall(){
       common['download'](3);
+    },
+    hidepop(){
+      this.$store.dispatch('setShow',false)
     }
   },
   mounted() {
-    //do something after mounting vue instance
-    //let document.querySelector("downloadMain");
-    let oHeight = $(".downloadMain").height();
-    $(".downloadMain").css('marginTop', -(oHeight/2+40));
+     let winHeight = $(window).height();
+     $(".downloadMain").css('marginTop',-winHeight/6);
+  },
+  updated() {
+    //do something after updating vue instance
 
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div id="" class="home">
-      <header-content></header-content>
-      <popup v-show="isShow"></popup>
+      <header-content ></header-content>
+      <popup v-show="showpop"></popup>
       <router-view ></router-view>
       <footers></footers>
 
@@ -14,28 +14,23 @@ import footers from '../footer/footer'
 import popup from "@/components/popup/popup";
 export default {
   name: "home",
-  data: () => ({
+  data(){
+    return {
       isShow:"",
-  }),
+    }
+  },
   components: {
     headerContent,
-    // container,
     footers,
     popup
 
   },
-  created() {
-    //do something after creating vue instance
-    this.isShow=this.$store.getters.getShow;
-    console.log(this.isShow)
-  },
-  mounted() {
-    //console.log()
 
-    //do something after mounting vue instance
-
+  computed:{
+    showpop(){
+      return this.$store.getters.getShow;
+    }
   }
-
 }
 </script>
 <style scoped >
