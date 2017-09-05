@@ -1,4 +1,5 @@
-import * as types from"./mutations";
 export default {
-
+   DEVICE(state,device){
+     state.device = device;
+   }
 }

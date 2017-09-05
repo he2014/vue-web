@@ -5,13 +5,23 @@
 </template>
 
 <script>
-
+import common from "@/pubulic/common";
 import headerContent from './components/header/header';
 export default {
   name:'app',
    components:{
     //  headerContent
-   }
+  },
+  beforeCreate() {
+    //do something before creating vue instance
+  },
+  created() {
+    //do something after creating vue instance
+  },
+  mounted() {
+    //do something after mounting vue instance
+      this.$store.dispatch("setDevice",common['device']());
+  }
 }
 </script>
 

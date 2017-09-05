@@ -1,3 +1,3 @@
-export default {
-     //service/room/v3?prv
+export const setDevice =({commit,state},val)=>{
+  commit("DEVICE",val)
 }
