@@ -1,7 +1,7 @@
 <template>
 
   <div id="footer" class="footerOut">
-      <div class="footer">
+      <div class="footer" v-show="headerShow">
           <div class="footerLeft">
             <img src="../../assets/img/logo@2x.png" />
             <img src="../../assets/img/7nujoom@2x.png"/>
@@ -20,6 +20,10 @@ export default {
     message:"footer"
   }),
   methods: {
+    headerShow(){
+      console.log(this.$store.getters.getHeader)
+      return this.$store.getters.getHeader;
+    },
     showpop() {
       this.$store.dispatch('setShow',true);
     }

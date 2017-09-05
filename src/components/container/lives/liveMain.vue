@@ -9,12 +9,15 @@ export default {
   data: () => ({
       mas:"oweoeoe"
   }),
-
+  created() {
+    //do something after creating vue instance
+    this.$store.dispatch("setHeader",false);
+  },
 methods: {
   add(evebt) {
       console.log(event)
   }
-}
+},
 }
 </script>
 <style scoped>

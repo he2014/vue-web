@@ -5,5 +5,8 @@ export default {
    },
    ISSHOW(state,isShow){
      state.isShow = isShow;
+   },
+   HEADERSHOW(state,value){
+     state.headerShow =value;
    }
 }

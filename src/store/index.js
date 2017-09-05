@@ -7,7 +7,8 @@ Vue.use(Vuex);
 
 const state = {
   device:"",
-	isShow:false
+	isShow:false,
+  headerShow:true
 }
 
 export default new Vuex.Store({
