@@ -16,12 +16,15 @@ export default {
     //do something before creating vue instance
   },
   created() {
+      this.$store.dispatch("setDevice",common['device']());
     //do something after creating vue instance
   },
   mounted() {
     //do something after mounting vue instance
-      this.$store.dispatch("setDevice",common['device']());
-  }
+    console.log(this.$store.getters.getDevice)
+  },
+
+
 }
 </script>
 

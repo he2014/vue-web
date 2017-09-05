@@ -23,16 +23,16 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 4444,
+    port: 9999,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
       context: [ //代理路径
-            "/news",
-            '/video',
-            '/chat'
+            // "/news",
+            // '/video',
+            // '/chat'
         ],
-        proxypath: 'http://127.0.0.1:3333',
+        proxypath: '',
 
     //    代理方法2
     // proxyTable: {//http://www.7najm.com/data/static/v4/?badge&r=6899

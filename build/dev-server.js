@@ -52,7 +52,7 @@ var options = {
     target: proxypath,
     changeOrigin: true,
 }
-if (context.length) {
+if (context.length>0) {
     app.use(proxyMiddleware(context, options))
 }
 //官方代理配置

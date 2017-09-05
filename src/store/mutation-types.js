@@ -1,1 +1,2 @@
-export  const downlType =  1;
+export  const DEVICE =  DEVICE;
+export const ISSHOW = ISSHOW;

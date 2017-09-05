@@ -18,5 +18,18 @@ export default{
       return unescape(r[2]);
     }
     return null;
+  },
+  download:(type)=>{
+    switch(type){
+      case 1://goole
+      location.href ="https://app.appsflyer.com/com.fission.sevennujoom?pid=snaptube&c=10000101" ;
+      break;
+      case 2://ios
+      location.href ="https://app.appsflyer.com/id917213988?pid=snaptube&c=10000101";
+      break;
+      case 3://install
+      location.href="https://www.7nujoom.com/resource/package/7NUJOOM.apk" ;
+      break; 
+    }
   }
 }
