@@ -46,7 +46,6 @@ const chatData = function(){
       let newArticleObject = {
         title: "chat",
         isOnline:Random.boolean(1,7, false),
-
         roomID: Random.natural(10000,99999),
         pic: Random.dataImage('252x300', 'chat'),
         name: Random.word(10,20),
@@ -60,7 +59,19 @@ const chatData = function(){
       dataInfo:data
     };
 };
+const liveRoom = ()=>{
+let data = {
+       code:0,
+       dataInfo:{
+        isOnline:Random.boolean(1,7, false),
+          name: Random.word(10,20),
+          num: Random.natural(1000,5999)
+       }
+  };
+  return data;
+}
 // Mock.mock( url, post/get , 返回的数据)；
 Mock.mock('/news/index', 'get', produceNewsData);
 Mock.mock('/video/index', 'get', videoData);
 Mock.mock('/chat/index', 'get', chatData);
+Mock.mock("/live/room",'get',liveRoom);

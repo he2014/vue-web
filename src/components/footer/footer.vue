@@ -21,7 +21,6 @@ export default {
   }),
   methods: {
     headerShow(){
-      console.log(this.$store.getters.getHeader)
       return this.$store.getters.getHeader;
     },
     showpop() {

@@ -1,5 +1,7 @@
 <template>
+
   <div class="container">
+  <header-content ></header-content>
     <div class="live">
           <div class="live-title">
             <div class="live-titleLeft">
@@ -73,10 +75,12 @@
               </p>
           </div>
     </div>
+    <footers></footers>
   </div>
 </template>
 <script>
-
+import headerContent from '../header/header'
+import footers from '../footer/footer'
 export default {
   name: "container",
   data: () => ({
@@ -86,6 +90,10 @@ export default {
         chatList:[],
         state:null
   }),
+  components: {
+    headerContent,
+    footers
+  },
 mounted() {
       this.$http.get("/news/index").then(function(res){
         let data = res['body'];

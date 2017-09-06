@@ -1,9 +1,6 @@
-var socketUrl = {
 
-		url01 :system_info.base_attr.socketUrl
-
-	}
 var Communicator = {
+    "url01":"ws://10.10.32.158:1237",
 		'protocol': {
 			'socketRequestType': {//socket请求类型
 				REGISTER:"100000",
@@ -164,7 +161,7 @@ var Communicator = {
 			this.chatUtil();
 			this.register_notify(this.protocol.socketBackType.USER_SELF_JOIN_ROOM,1,function(json){});
 			//建立socket链接
-			this.connect_server(socketUrl.url01);
+			this.connect_server(this.url01);
 
 		},
 
@@ -227,7 +224,7 @@ var Communicator = {
 		},
 		'chatUtil':function(){
 			var _this = this;
-			console.log(_this.rte_ROOMtype);
+			//console.log(_this.rte_ROOMtype);
 			_this.ws=null;
 			_this.send_sequence=1;
 			_this.request_handler={};
@@ -265,9 +262,50 @@ var Communicator = {
 			}
 			list.push(objs);
 		},
+		"writeUTF":function(str, isGetBytes){
+						//转码utf码
+								var back = [];
+						 var byteSize = 0;
+						 for (var i = 0; i < str.length; i++) {
+							 var code = str.charCodeAt(i);
+							 if (0x00 <= code && code <= 0x7f) {
+									byteSize += 1;
+									back.push(code);
+							 } else if (0x80 <= code && code <= 0x7ff) {
+									byteSize += 2;
+									back.push((192 | (31 & (code >> 6))));
+									back.push((128 | (63 & code)))
+							 } else if ((0x800 <= code && code <= 0xd7ff)
+									 || (0xe000 <= code && code <= 0xffff)) {
+									byteSize += 3;
+									back.push((224 | (15 & (code >> 12))));
+									back.push((128 | (63 & (code >> 6))));
+									back.push((128 | (63 & code)))
+							 }
+							}
+							for (i = 0; i < back.length; i++) {
+								back[i] &= 0xff;
+							}
+							if (isGetBytes) {
+								return back
+							}
+							if (byteSize <= 0xff) {
+								return [0, byteSize].concat(back);
+							} else {
+								return [byteSize >> 8, byteSize & 0xff].concat(back);
+							}
 
+		},
 
+ 		"uintToString":function(uintArray) {
+			//解码arraybuffer编码；
+			var encodedString = String.fromCharCode.apply(null, uintArray),
+					decodedString = decodeURIComponent(escape(encodedString));
+			return decodedString;
+		},
 		"on_websocket_data":function(event){
+
+
 			var _this = this;
 			if (event.data.byteLength < 22) {
 				return;
@@ -284,6 +322,7 @@ var Communicator = {
 			read_offset+=4;
 			var timestamp=_this.read_long(event.data,read_offset);
 			read_offset+=8;
+			//console.log(event.data)
 			var flag=_this.read_short(event.data,read_offset);
 			read_offset+=2;
 			if((flag & _this.Flag.NEED_ACK ) == _this.Flag.NEED_ACK){
@@ -308,40 +347,22 @@ var Communicator = {
 			if((flag & _this.Type.ALL_MESSAGE_TYPE) == _this.Type.RESPONSE){
 				code=_this.read_int(event.data,read_offset);
 				read_offset+=4;
-
 			}
 			var length=_this.read_int(event.data,read_offset);
 			read_offset+=4;
 			if(length>0){
-				var body_buffer=new Int8Array(event.data.slice(read_offset,read_offset+length));
-				body=new TextDecoder("utf-8").decode(body_buffer);
+				var body_buffer = new Uint8Array(event.data.slice(read_offset,read_offset+length))
+				//var body_buffer=new Int8Array();
+
+				body=this.uintToString(body_buffer)
 			}
+
+			//alert(JSON.stringify(JSON.parse(body)))
 			if((flag & _this.Type.ALL_MESSAGE_TYPE) == _this.Type.NOTIFY){
 				//socket推送的信息
 				var socketData = $.parseJSON(body);
 				_this.socket_message(socketData);
-				//做本地用户缓存
-//				var time = new Date;
-//				var isTrue = false;
-//	        	if(socketData['info']['uid'] && (socketData['info']['ut'] || socketData['info']['ut']==0)){
-//	        		isTrue = true;
-//	        	}
-//				if(!isTrue && localUserObjs.hasOwnProperty(socketData['info']['uid'])){
-//					_this.socket_code_do(socketData);
-//				}else{
-//          		$.ajax({
-//		                url: '/service/room/v3/u/v4/'+DATASOURCE['room']['roomId']+'/'+socketData['info']['uid'] +'/'+socketData['info']['ut'],
-//		                type: "get",
-//		                dataType: 'json',
-//		                success:function(result){
-//		                    if (result['code'] == 0) {
-//		                    	localUserObjs[socketData['info']['uid']] = result.dataInfo;
-////		                    	_this.socket_code_do(socketData);
-//		                    }
-//		                    _this.socket_code_do(socketData);
-//		                }.bind(this)
-//		            });
-//          	}
+
 				if(socketData && socketData.mid && this.notify_handler[socketData.mid]){
 					$.each(this.notify_handler[socketData.mid],function(idx,value){
 						var func=value.Handler;
@@ -350,7 +371,6 @@ var Communicator = {
 						}
 					});
 				}
-
 			}else if((flag & _this.Type.ALL_MESSAGE_TYPE) == _this.Type.RESPONSE){
 				var handler=this.request_handler[sequence];
 				if(handler!=null){
@@ -377,7 +397,6 @@ var Communicator = {
 				_this.ws = new WebSocket(url);
 				_this.ws.binaryType = 'arraybuffer';
 				_this.ws.onmessage = function(event) {
-					console.log("socket onmessage---")
 					_this.on_websocket_data(event);
 				};
 				_this.ws.onopen = function(event) {
@@ -388,7 +407,7 @@ var Communicator = {
 				_this.ws.onclose = function(event) {
 					console.log("socket 断开---")
 					_this.connected=false;
-					_this.connect_server(socketUrl.url01);
+					_this.connect_server(_this.url01);
 				};
 			}
 
@@ -413,7 +432,7 @@ var Communicator = {
 		//请求建立socket链接的回调
 		'send_handshake_callback':function(code,data){
 			var _this = this;
-			console.log("SEND Connect RESULT:"+code);
+			//console.log("SEND Connect RESULT:"+code);
 			if(code==0){
 				_this.send_handshake_successCallback();
 			}else{
@@ -432,7 +451,7 @@ var Communicator = {
 		},
 		//socket建立链接失败，再重新建立链接
 		'send_handshake_errorCallback':function(){
-			this.connect_server(socketUrl.url01);
+			this.connect_server(this.url01);
 		},
 		//socket绑定已登录的用户
 		'bind_login_user':function(loginKey){
@@ -442,7 +461,7 @@ var Communicator = {
 		},
 		//绑定用户的回调
 		'bind_login_user_callback':function(code,data){
-			console.log("SEND BIND RESULT:"+code+",data:"+data);
+			//console.log("SEND BIND RESULT:"+code+",data:"+data);
 		},
 		//用户进入房间
 		'join_room':function(roomId){
@@ -504,13 +523,13 @@ var Communicator = {
 			);
 		},
 		'out_room_callback':function(code,data){
-			console.log("SEND OUT ROOM RESULT:"+code+",data:"+data);
+			//console.log("SEND OUT ROOM RESULT:"+code+",data:"+data);
 		},
 		'send_message':function(message,callback){
 			var _this = this;
 			message=JSON.stringify(message);
 			this.request_handler[this.send_sequence]=callback;
-			var msg_buffer=new TextEncoder().encode(message);
+			var msg_buffer=this.writeUTF(message,true);
 			var flag=0;
 			flag|=_this.Version.VERSION_1;
 			flag|=_this.Type.REQUEST;
@@ -530,6 +549,7 @@ var Communicator = {
 			this.send_binary(send_buffer);
 		},
 		'send_binary':function(send_buffer){
+			var _this = this;
 			if (!window.WebSocket) {
 				return;
 			}

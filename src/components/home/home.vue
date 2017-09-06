@@ -1,16 +1,16 @@
 <template>
   <div id="" class="home">
-      <header-content ></header-content>
+
       <popup v-show="showpop"></popup>
       <router-view ></router-view>
-      <footers></footers>
+
 
   </div>
 </template>
 <script>
-import headerContent from '../header/header'
+
 import container from '../container/indexcontainer'
-import footers from '../footer/footer'
+
 import popup from "@/components/popup/popup";
 export default {
   name: "home",
@@ -20,14 +20,13 @@ export default {
     }
   },
   components: {
-    headerContent,
-    footers,
     popup
-
   },
-
   computed:{
     showpop(){
+      if(this.$store.getters.getShow){
+        $("body").unbind('touchmove')
+      }
       return this.$store.getters.getShow;
     }
   }

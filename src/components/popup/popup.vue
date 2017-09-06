@@ -1,6 +1,6 @@
 <template>
   <div class="downloadPop" @click="hidepop">
-    <div class="downloadMain">
+    <div class="downloadMain" @click.stop>
        <div class="downloadMainTop">
            <img src="../../assets/img/downLOGO.png" alt="">
        </div>
@@ -14,7 +14,6 @@
             <div class="iPhoneBtn" v-else  @click="iosDown">Download</div>
        </div>
     </div>
-
   </div>
 </template>
 <script>
@@ -39,6 +38,7 @@ export default {
 
   methods: {
     androidDown(){
+
       common['download'](1);
     },
     iosDown() {
