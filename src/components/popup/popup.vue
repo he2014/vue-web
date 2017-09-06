@@ -80,6 +80,7 @@ export default {
   border-radius: 24px;
 }
 .downloadMainTop{
+  width: 276px;
   margin-top: -116px;
   margin-left: 120px;
 }

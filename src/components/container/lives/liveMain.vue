@@ -58,6 +58,7 @@
 import newHeader from "@/components/header/newHeader"
 import newFooter from "@/components/footer/newFooter"
 import recommend from "@/components/container/recommend/recommend"
+import common from "@/pubulic/common"
 export default {
   name:"liveMain",
   data: () => ({
@@ -86,6 +87,7 @@ export default {
   },
 methods: {
   videoRender(){
+    let _this =this;
     let  palyInfo ={
               "controls":false,
               "mute":"",
@@ -93,12 +95,13 @@ methods: {
               "preload":"none",
               "modes":[{"type":"html5"}],
               "autostart":"false",
-              "file":"http://streamerhls.7nujoom.com/live/stream_2019215/playlist.m3u8",
+              "file":"http://streamerhls.7nujoom.com/live/stream_4571934/playlist.m3u8",
               "height":"100%",
               "width":"100%",
               "volume":100,
               "events":{
                     onComplete: function() {
+                    _this.$router.push("/index?flag=0")
     				      },
     				      onVolume: function() {
                     console.log("声音大小改变!!!");
@@ -142,7 +145,7 @@ methods: {
 </script>
 <style scoped>
 .accept{
-  width: 100%;
+  width: 734px;
   height: 56px;
   position: absolute;
   left: 0;
@@ -164,7 +167,7 @@ text-align: center;
 line-height: 68px;
 font-size: 34px;
 color:#fff;
-margin-right: 10px;
+
 }
 .acceptText{
   width: 565px;
