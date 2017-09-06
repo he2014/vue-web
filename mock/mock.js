@@ -65,7 +65,9 @@ let data = {
        dataInfo:{
         isOnline:Random.boolean(1,7, false),
           name: Random.word(10,20),
-          num: Random.natural(1000,5999)
+          num: Random.natural(1000,5999),
+          pic: Random.dataImage('750x920', ''),
+          pics: Random.dataImage('68x68', 'Hot')
        }
   };
   return data;

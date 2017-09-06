@@ -42,10 +42,20 @@ thead, tr, th, td ,i,span,img,b{
   font-family: HelveticaNeue !important;
   vertical-align: baseline;
   list-style: none;
+  text-decoration:none;
+}
+#player{
+  position: absolute;
 }
 #myApp {
   width: 750px;
   overflow:hidden;
+}
+.IIV::-webkit-media-controls-play-button,
+.IIV::-webkit-media-controls-start-playback-button {
+            opacity: 0;
+            pointer-events: none;
+            width: 5px;
 }
 
 </style>

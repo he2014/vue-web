@@ -24,9 +24,6 @@ export default {
   },
   computed:{
     showpop(){
-      if(this.$store.getters.getShow){
-        $("body").unbind('touchmove')
-      }
       return this.$store.getters.getShow;
     }
   }

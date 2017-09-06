@@ -24,7 +24,7 @@ export default {
 </script>
 <style  scoped>
 .reheader{
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 750px;
@@ -33,6 +33,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 98;
 }
 .reheaderLeft{
   padding-left: 20px;

@@ -1,3 +1,4 @@
+
 <template>
   <div class="header">
     <div class="headerContaner">
@@ -39,5 +40,5 @@ export default {
        justify-content: center;
        align-items: flex-end;
      }
-     
+
 </style>
