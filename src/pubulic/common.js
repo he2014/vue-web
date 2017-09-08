@@ -11,6 +11,7 @@ export default{
 			}
       return version;
   },
+  //获取search
   getUrlParam:()=>{
     let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
     let r = window.location.search.substr(1).match(reg);
@@ -29,7 +30,21 @@ export default{
       break;
       case 3://install
       location.href="https://www.7nujoom.com/resource/package/7NUJOOM.apk" ;
-      break; 
+      break;
     }
-  }
+  },
+  //生成 n个不重复随机数且以数组返回
+  myRandom :(n,min,max)=>{
+      let arr=[];
+        let arr2=[];
+        let i =0;
+        for(i=0;i<max-min+1;i++){
+          arr[i]=i+min;
+          }
+          for(let j,x,i=arr.length;i;j=parseInt(Math.random()*i),x=arr[--i],arr[i]=arr[j],arr[j]=x);
+          for(i=0;i<n;i++){
+            arr2[i]=arr[i];
+          }
+          return arr2;
+    }
 }

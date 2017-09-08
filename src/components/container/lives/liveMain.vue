@@ -21,7 +21,7 @@
                     <div class="acceptText">{{message}}</div>
                     <a href="javascript::" @click="showpop">{{accept}}</a>
                   </div>
-                  <div class="posterGift">
+                  <div class="posterGift roomPosterGift">
                     <img @click="showpop" class="posterSpeak" src="../../../assets/img/room_btn_messege@2x.png">
                     <img @click="showpop" class="posterGiveGift" src="../../../assets/img/btn_gift_2@2x.png">
                   </div>
@@ -95,7 +95,7 @@ methods: {
               "preload":"none",
               "modes":[{"type":"html5"}],
               "autostart":"false",
-              "file":"http://streamerhls.7nujoom.com/live/stream_4571934/playlist.m3u8",
+              "file":"http://streamerhls.7nujoom.com/live/stream_6357377/playlist.m3u8",
               "height":"100%",
               "width":"100%",
               "volume":100,
@@ -107,6 +107,7 @@ methods: {
                     console.log("声音大小改变!!!");
     				      },
 									onError:function(){
+                    //_this.$router.push("/index?flag=0")
 									},
     				      onReady: function() {
     					       var that = this;
@@ -264,6 +265,9 @@ background:url("../../../assets/img/huiu@2x.png") 40px center no-repeat;
   margin-left: -70px;
   margin-top: -70px;
       z-index: 98;
+}
+.roomPosterGift{
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%);
 }
 .posterGift{
   position: absolute;
