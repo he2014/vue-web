@@ -1,16 +1,12 @@
 <template>
   <div id="" class="home">
-
       <popup v-show="showpop"></popup>
       <router-view ></router-view>
-
-
   </div>
 </template>
 <script>
 
 import container from '../container/indexcontainer'
-
 import popup from "@/components/popup/popup";
 export default {
   name: "home",

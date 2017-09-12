@@ -27,7 +27,7 @@ const videoData = function(){
       let newArticleObject = {
         title: "video",
         isOnline:Random.boolean(1,7, false),
-        roomID: Random.natural(10000,99999),
+        vid: Random.natural(1,99),
         pic: Random.dataImage('252x300', 'video'),
         name: Random.word(10,20),
         num: Random.natural(1000,5999)
@@ -67,7 +67,8 @@ let data = {
           name: Random.word(10,20),
           num: Random.natural(1000,5999),
           pic: Random.dataImage('750x920', ''),
-          pics: Random.dataImage('68x68', 'Hot')
+          pics: Random.dataImage('68x68', 'Hot'),
+          videoID: Random.natural(10,99)
        }
   };
   return data;

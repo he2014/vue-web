@@ -41,12 +41,12 @@
             </div>
           </div>
           <div class="ul">
-              <p v-for="(item,index) in videoList" :key='index'>
+              <router-link tag="p" :to="{path:'video',query:{vid:item['vid']}}" v-for="(item,index) in videoList" :key='index'>
                   <img v-bind:src="item['pic']"/>
                   <span class="online">
                      <i>{{item["num"]}}</i>
                   </span>
-              </p>
+              </router-link>
           </div>
     </div>
     <div class="chat">
@@ -61,7 +61,7 @@
             </div>
           </div>
           <div class="ul">
-              <p v-for="(item,index) in chatList" :key='index'>
+              <router-link tag="p" :to="{path:'chat',query:{chatId:item['roomID'],pid:0}}" v-for="(item,index) in chatList" :key='index'>
                 <span class="chatContent">
                   <img v-bind:src="item['pic']"/>
                 </span>
@@ -72,7 +72,7 @@
                       <i>{{item['num']}}</i>
                     </em>
                   </b>
-              </p>
+              </router-link>
           </div>
     </div>
     <footers></footers>

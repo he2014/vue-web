@@ -4,6 +4,8 @@ import App from '../App'
 import homeContent from '../components/home/home';
 import liveMain from "@/components/container/lives/liveMain";
 import indexcontainer from "@/components/container/indexcontainer";
+import videoMain from "@/components/container/video/video";
+import chatMain from "@/components/container/chat/chat";
 
 Vue.use(Router)
 
@@ -26,6 +28,12 @@ export default new Router({
       },{
         path:"/live",
         component:liveMain
+      },{
+        path:"/video",
+        component:videoMain
+      },{
+        path:"/chat",
+        component:chatMain
       }
 
 
