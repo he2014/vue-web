@@ -1,6 +1,6 @@
 import common from"./common"
 export  const  base = {
-     //baseUrl:"http://10.10.32.145:10001"
+    // baseUrl:"http://10.10.32.145:10001"
     //baseUrl:"http://www.7nujoom.com"
     baseUrl:"http://www.haahi.com"
 
