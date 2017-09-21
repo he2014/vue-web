@@ -2,7 +2,7 @@
 
   <div class="container">
   <header-content ></header-content>
-    <div class="live">
+    <div class="live" v-if="liveLock">
           <div class="live-title">
             <div class="live-titleLeft">
                <img src="../../assets/img/tab_live_btn_pressed@2x.png"/>
@@ -14,22 +14,22 @@
             </div>
           </div>
           <div class="ul">
-              <router-link tag="p" :to="{path:'live',query:{ sf:item['roomID']}}" v-for="(item,index) in list" :key='index'>
-                  <img class="poster" v-bind:src="item['pic']"/>
-                  <span class="isOnline" v-if="item['isOnline']">
-                       <em class="onLive" v-if="item['isHot']">
+              <router-link tag="p" :to="{path:'live',query:{ sf:item['ri'],pid:pids}}" v-for="(item,index) in list" :key='index'>
+                  <img class="poster" v-bind:src="url+item['ci']" @error="setErrorImg"/>
+                  <span class="isOnline" v-if="item['st']==1">
+                       <em class="onLive" v-if="item['sti']">
                           <i><img src="../../assets/img/live.gif" /></i>
-                          <b><span>{{item['num']}}</span></b>
+                          <b><span>{{item['ol']}}</span></b>
                        </em>
                        <i class="onLive" v-else>
                          <em><img src="../../assets/img/live.gif" /></em>
-                         <b><span>{{item['num']}}</span></b>
+                         <b><span>{{item['ol']}}</span></b>
                        </i>
             </span>
               </router-link>
           </div>
     </div>
-    <div class="video">
+    <div class="video" v-if="videoLock">
           <div class="video-title">
             <div class="video-titleLeft">
                <img src="../../assets/img/tab_btn_video1@2x.png"/>
@@ -41,15 +41,15 @@
             </div>
           </div>
           <div class="ul">
-              <router-link tag="p" :to="{path:'video',query:{vid:item['vid']}}" v-for="(item,index) in videoList" :key='index'>
-                  <img v-bind:src="item['pic']"/>
+              <router-link tag="p" :to="{path:'video',query:{vid:item['vid'],pid:pids}}" v-for="(item,index) in videoList" :key='index'>
+                  <img v-bind:src="item['pic']" @error="setErrorImg"/>
                   <span class="online">
                      <i>{{item["num"]}}</i>
                   </span>
               </router-link>
           </div>
     </div>
-    <div class="chat">
+    <div class="chat" v-if="chatLock">
           <div class="chat-title">
             <div class="chat-titleLeft">
                <img src="../../assets/img/tab_btn_video1@2x.png"/>
@@ -61,15 +61,15 @@
             </div>
           </div>
           <div class="ul">
-              <router-link tag="p" :to="{path:'chat',query:{chatId:item['roomID'],pid:0}}" v-for="(item,index) in chatList" :key='index'>
+              <router-link tag="p" :to="{path:'chat',query:{sf:item['rid'],pid:pids}}" v-for="(item,index) in chatList" :key='index'>
                 <span class="chatContent">
-                  <img v-bind:src="item['pic']"/>
+                  <img v-bind:src="url+item['rpp']" @error="setErrorImg"/>
                 </span>
                   <b class="num">
-                    <span>{{item['name']}}</span>
+                    <span>{{item['rmn']}}</span>
                     <em>
                       <img src="../../assets/img/icon_usercount_02@2x.png" />
-                      <i>{{item['num']}}</i>
+                      <i>{{item['un']}}</i>
                     </em>
                   </b>
               </router-link>
@@ -81,6 +81,8 @@
 <script>
 import headerContent from '../header/header'
 import footers from '../footer/footer'
+import {base,pid} from "@/pubulic/config";
+import common from"@/pubulic/common";
 export default {
   name: "container",
   data: () => ({
@@ -88,38 +90,77 @@ export default {
         list:[],
         videoList:[],
         chatList:[],
-        state:null
+        state:null,
+        liveLock:false,
+        chatLock:false,
+        videoLock:false,
+        show:false,
+        livedefaulte:""
+
   }),
   components: {
     headerContent,
     footers
   },
 mounted() {
-      this.$http.get("/news/index").then(function(res){
-        let data = res['body'];
-        if(data['code']==0)
-         this.list = data['dataInfo'];
-      }.bind(this))
-     this.$http.get("/video/index").then(function(data){
-         let list = data['body'];
-         if(list['code']==0){
-           this.videoList = list['dataInfo'];
-         }
-     }.bind(this))
+     let url =base.baseUrl;
+     this.pids = pid();
+     this.url = url+"/resource/";
 
-    this.$http.get("/chat/index").then(function(data){
-      let list = data['body'];
-      if(list['code']==0){
-        this.chatList = list['dataInfo'];
+    this.$http.get(url+"/service/room/v3?prv").then(function(data){
+
+         if(data.status >= 200 && data.status < 300){
+           let LIvelist = data['body'];
+           if(LIvelist['code']==0&&LIvelist['dataInfo']['ri'].length>0){
+             this.liveLock = true;
+             this.list = LIvelist['dataInfo']['ri'].slice(0,4);
+        }
+         }
+    }.bind(this));
+    this.$http.get(url+"/service/chat/room/v3/list/room?requestType=1")
+    .then(function(data){
+      if(data.status>=200&&data.status<300){
+        let chat = data['body'];
+        if(chat['code']==0&&chat['dataInfo'].length>0){
+          this.chatLock = true;
+          this.chatList = chat['dataInfo'].slice(0,3);
+        }
       }
+
+    }.bind(this));
+    this.$http.get(url+"/video/h5/index").then(function(data){
+        console.log(data)
     }.bind(this))
 
-//   //do something after mounting vue instance
-//
+    //   this.$http.get("/news/index").then(function(res){
+    //     console.log(process)
+    //     let data = res['body'];
+    //     if(data['code']==0)
+    //      this.list = data['dataInfo'];
+    //   }.bind(this))
+    //  this.$http.get("/video/index").then(function(data){
+    //      let list = data['body'];
+    //      if(list['code']==0){
+    //        this.videoList = list['dataInfo'];
+    //      }
+    //  }.bind(this))
+    //
+    // this.$http.get("/chat/index").then(function(data){
+    //   let list = data['body'];
+    //   if(list['code']==0){
+    //     this.chatList = list['dataInfo'];
+    //   }
+    // }.bind(this))
+
+//   //do something after mounting vu
  },
  methods:{
+   setErrorImg(e){
+     e.target.setAttribute('src',"static/img/recommend/head.png");
+   },
    showPop(){
      this.$store.dispatch("setShow",true);
+     this.$store.dispatch("setonlineflag",false);
    }
  }
 

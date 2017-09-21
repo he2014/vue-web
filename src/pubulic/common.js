@@ -16,7 +16,7 @@ export default{
     let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
     let r = window.location.search.substr(1).match(reg);
     if (r != null) {
-      return unescape(r[2]);
+      return Math.floor(unescape(r[2]));
     }
     return null;
   },
@@ -46,5 +46,12 @@ export default{
             arr2[i]=arr[i];
           }
           return arr2;
-    }
+    },
+    replace_html:function(str) {//替换下列符号
+		if (!str) {
+			return null;
+		}
+		return $.trim(str).replace(new RegExp("&", "g"), "&amp;").replace(new RegExp("<", "g"), "&lt;").replace(new RegExp(">", "g"), "&gt;")
+	}
+
 }

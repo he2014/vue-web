@@ -11,7 +11,7 @@ var express = require('express')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = require('./webpack.dev.conf')
-var mock = require('../mock/mock.js')
+//var mock = require('../mock/mock.js')
 
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
@@ -78,7 +78,7 @@ app.use(hotMiddleware)
 
 // serve pure static assets
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
-app.use('/mock',express.static('./mock'))//开发环境注册mock
+//app.use('/mock',express.static('./mock'))//开发环境注册mock
 app.use(staticPath, express.static('./static'))
 
 var uri = 'http://127.0.0.1:' + port

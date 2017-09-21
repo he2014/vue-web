@@ -25,6 +25,7 @@ export default {
     },
     showpop() {
       this.$store.dispatch('setShow',true);
+      this.$store.dispatch("setonlineflag",false)
     }
   }
 }

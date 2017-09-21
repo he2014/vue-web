@@ -7,7 +7,8 @@ import FastClick from 'fastclick';
 import store from './store/';
 import vueResource from 'vue-resource';
 import Es6Promise from 'es6-promise';
-import mockjs from "../mock/mock.js";
+// import mockjs from "@/pubulic/mock.js";
+
 Es6Promise.polyfill();
 if ('addEventListener' in document) {
     document.addEventListener('DOMContentLoaded', function() {
@@ -23,6 +24,7 @@ if ('addEventListener' in document) {
   })();
 Vue.config.productionTip = false
 Vue.use(vueResource);
+// Vue.http.options.root= base.baseUrl;
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

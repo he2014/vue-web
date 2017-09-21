@@ -1,6 +1,6 @@
 <template>
   <div id="" class="home">
-      <popup v-show="showpop"></popup>
+      <popup v-show="showpop" ></popup>
       <router-view ></router-view>
   </div>
 </template>
@@ -13,15 +13,25 @@ export default {
   data(){
     return {
       isShow:"",
+      // show:false
     }
   },
   components: {
     popup
   },
+  mounted() {
+    //do something after mounting vue instance
+    //console.log(this.$route)
+
+  },
   computed:{
+
     showpop(){
       return this.$store.getters.getShow;
     }
+  },
+  watch:{
+
   }
 }
 </script>

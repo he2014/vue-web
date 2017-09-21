@@ -4,16 +4,18 @@
     <div class="liveMain">
               <div class="video">
                 <div class="roomMain">
+
                 <div id='player' class="player"></div>
+                <live-socket :roomID="roomId"></live-socket>
                 <div>
                   <div class="posterFlow">
                      <div class="hotMessage">
                        <div class="posterHotMessage">
-                           <div class="poterHotName">{{mas['name']}}</div>
-                           <div class="posterHotNum">{{mas['num']}}</div>
+                           <div class="poterHotName">{{mas['nk']}}</div>
+                           <div class="posterHotNum">{{mas['ol']}}</div>
                        </div>
                        <div class="posterHotHerader">
-                           <img :src="mas['pics']">
+                           <img :src="url+mas['headPic']">
                        </div>
                      </div>
                   </div>
@@ -31,17 +33,17 @@
                      <div class="posterFlow">
                         <div class="hotMessage">
                           <div class="posterHotMessage">
-                              <div class="poterHotName">{{mas['name']}}</div>
-                              <div class="posterHotNum">{{mas['num']}}</div>
+                              <div class="poterHotName">{{mas['nk']}}</div>
+                              <div class="posterHotNum">{{mas['ol']}}</div>
                           </div>
                           <div class="posterHotHerader">
-                              <img :src="mas['pics']">
+                              <img :src="url+mas['headPic']">
                           </div>
                         </div>
                      </div>
                      <div class="posterImg">
                        <img class="playBut" @click="videoPlay" src="../../../assets/img/playBut.png">
-                       <img class="posterHotImg" :src="mas['pic']">
+                       <img class="posterHotImg" :src="url+mas['rpp']" @error="setErrorImg">
                      </div>
                      <div class="posterGift">
                        <img @click="showpop" class="posterSpeak" src="../../../assets/img/room_btn_messege@2x.png">
@@ -59,66 +61,94 @@ import newHeader from "@/components/header/newHeader"
 import newFooter from "@/components/footer/newFooter"
 import recommend from "@/components/container/recommend/recommend"
 import common from "@/pubulic/common"
+import liveSocket from "@/components/container/lives/liveSocket";
+import { base} from "@/pubulic/config";
 export default {
   name:"liveMain",
   data: () => ({
       mas:"",
       video:'',
       message:"This Broadcaster is inviting you to chat! Download 7Nujoom to follow her!",
-      accept:"Accept"
+      accept:"Accept",
+      roomId:null,
+      url:""
   }),
   components:{
     newHeader,
     newFooter,
-    recommend
+    recommend,
+    liveSocket
   },
   created() {
-  },
-  mounted() {
-    let _this = this;
-    this.$http.get("/live/room").then(function(data){
-      let roomData = data['body'];
-      if(roomData['code']==0){
-          _this.mas = roomData['dataInfo'];
-          _this.videoRender();
+    this.roomId = this.$route.query.sf;
+
+    let url = base.baseUrl;
+
+    this.$http.get(url+"/service/room/v3/info/h5/"+this.roomId).then(function(data){
+      //console.log(data)
+      if(data.status>=200&&data.status<300){
+        if(data.body.code==0)this.mas = data['body']['dataInfo'];
+        this.url = url+"/resource/";
+        if(this.mas.flg !=1){
+          this.$router.push("/index?flag=0");
+          this.$store.dispatch("setonlineflag",true);
+          return;
+        }
+        if(this.mas.fs==0){
+          this.$router.push("/index");
+          return;
+        }
+
       }
 
-    })
+    }, function(error){
+       console.log(error)
+    }.bind(this))
+  //  alert(common.getUrlParam)
+  //console.log(this.$route)
+  },
+  mounted() {
+    // )
+    //console.log(this.roomId)
+    this.videoRender();
   },
 methods: {
+  setErrorImg(e){
+    e.target.setAttribute('src',"static/img/recommend/head.png");
+  },
   videoRender(){
     let _this =this;
     let  palyInfo ={
               "controls":false,
               "mute":"",
-              "stretching":"exactfit",
+              // "stretching":"exactfit",//fill
+              "stretching":"fill",
               "preload":"none",
               "modes":[{"type":"html5"}],
               "autostart":"false",
-              "file":"http://streamerhls.7nujoom.com/live/stream_6357377/playlist.m3u8",
+              // file:"http://vjs.zencdn.net/v/oceans.mp4",
+              //"file":"http://streamerhls.7nujoom.com/live/stream_"+_this.roomId+"/playlist.m3u8",
+             "file":"http://streamerhls.7nujoom.com/live/haahi_"+_this.roomId+"/playlist.m3u8",
               "height":"100%",
               "width":"100%",
               "volume":100,
               "events":{
                     onComplete: function() {
-                    _this.$router.push("/index?flag=0")
+                    _this.$router.push("/index?flag=0");
+                    _this.$store.dispatch("setonlineflag",true);
     				      },
     				      onVolume: function() {
                     console.log("声音大小改变!!!");
     				      },
 									onError:function(){
-                    //_this.$router.push("/index?flag=0")
+
+                    //  _this.$router.push("/index?flag=0");
+                    //  _this.$store.dispatch("setonlineflag",true);
 									},
     				      onReady: function() {
-    					       var that = this;
-    					       var video = document.querySelector('video');
-            					video.attr({
-            						"x5-video-player-type": "h5",
-            						"x5-video-player-fullscreen": "true",
-            						'airplay':"airplay",
-            						"x-webkit-airplay":"true",
-            					});
-                      enableInlineVideo(video);
+                    //alert(1)
+                      let video = document.querySelector('video');
+                       enableInlineVideo(video);
             				},
             				onPlay: function() {
             					console.log("开始播放!!!");
@@ -132,14 +162,24 @@ methods: {
               }
           }
       let player=this.video = jwplayer("player").setup(palyInfo);
+
   },
   videoPlay(){
+     $("video").attr({
+       "x5-video-player-type": "h5",
+       "x5-video-player-fullscreen": "true",
+       'airplay':"airplay",
+       "x-webkit-airplay":"true",
+     });
+     //alert($("video").attr('src'))
     this.video.play();
     $("#livePoster ").hide();
     $('.liveMain').css('height', $(window).height());
+    //alert(this.video.getAudioTracks())
   },
   showpop(){
     this.$store.dispatch('setShow',true);
+    this.$store.dispatch('setonlineflag',false)
   }
 },
 }
@@ -226,8 +266,10 @@ color:#fff;
   width: 68px;
   height: 68px;
   margin-right: 5px;
+  margin-left: 3px;
 }
 .posterHotHerader img{
+  height: 60px;
   border-radius: 50%;
 
 }
@@ -245,6 +287,7 @@ font-size: 24px;
 color: #fff;
 letter-spacing: 0;
 line-height: 34px;
+text-align: right;
 }
 .posterHotNum{
 font-size: 20px;
@@ -255,7 +298,7 @@ text-align: right;
 line-height: 28px;
 height: 24px;
 padding-right: 20px;
-min-width: 60px;
+min-width: 120px;
 background:url("../../../assets/img/huiu@2x.png") 40px center no-repeat;
 }
 .playBut{

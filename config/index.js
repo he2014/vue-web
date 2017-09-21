@@ -28,8 +28,8 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
       context: [ //代理路径
-            // "/news",
-            // '/video',
+            //  "/service",
+            // '/data',
             // '/chat'
         ],
         proxypath: '',

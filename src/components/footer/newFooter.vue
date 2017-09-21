@@ -12,6 +12,7 @@ export default {
   methods:{
     showpop() {
       this.$store.dispatch('setShow',true);
+      this.$store.dispatch('setonlineflag',false)
     }
   }
 }

@@ -1,6 +1,10 @@
+var socketUrl = {
+		url01:"ws://52.59.31.221:8004"
+		//url01 :"ws://TRANS-176352860.eu-central-1.elb.amazonaws.com:8004",//正式
 
+
+	}
 var Communicator = {
-    "url01":"ws://10.10.32.158:1237",
 		'protocol': {
 			'socketRequestType': {//socket请求类型
 				REGISTER:"100000",
@@ -152,6 +156,7 @@ var Communicator = {
 			}
 		},
 		'init':function(container,msg,rte){
+			console.log(msg)
       this.socket_message = msg;
 			this.roomId = container;
 
@@ -161,7 +166,7 @@ var Communicator = {
 			this.chatUtil();
 			this.register_notify(this.protocol.socketBackType.USER_SELF_JOIN_ROOM,1,function(json){});
 			//建立socket链接
-			this.connect_server(this.url01);
+			this.connect_server(socketUrl.url01);
 
 		},
 
@@ -203,7 +208,10 @@ var Communicator = {
 			buffer[offset+3]=(value>>>0)&0xFF;
 		},
 		'read_short':function(src,offset){
+			////console.log(offset)
+			//console.log(src);
 			var data=src.slice(offset,offset+2);
+			//console.log(data)
 			var buffer=new Uint8Array(data);
 			return (buffer[1] & 0xff) | (buffer[0] & 0xff) << 8 ;
 		},
@@ -360,7 +368,8 @@ var Communicator = {
 			//alert(JSON.stringify(JSON.parse(body)))
 			if((flag & _this.Type.ALL_MESSAGE_TYPE) == _this.Type.NOTIFY){
 				//socket推送的信息
-				var socketData = $.parseJSON(body);
+				var socketData = JSON.parse(body);
+        // console.log(socketData)
 				_this.socket_message(socketData);
 
 				if(socketData && socketData.mid && this.notify_handler[socketData.mid]){
@@ -397,17 +406,20 @@ var Communicator = {
 				_this.ws = new WebSocket(url);
 				_this.ws.binaryType = 'arraybuffer';
 				_this.ws.onmessage = function(event) {
+					//console.log(event)
+					//alert(JSON.stringify(event))
+					//console.log("socket onmessage---")
 					_this.on_websocket_data(event);
 				};
 				_this.ws.onopen = function(event) {
-					console.log("socket onopen---")
+					//console.log("socket onopen---")
 					_this.connected=true;
 					_this.send_handshake();
 				};
 				_this.ws.onclose = function(event) {
-					console.log("socket 断开---")
+					//console.log("socket 断开---")
 					_this.connected=false;
-					_this.connect_server(_this.url01);
+					_this.connect_server(socketUrl.url01);
 				};
 			}
 
@@ -451,7 +463,7 @@ var Communicator = {
 		},
 		//socket建立链接失败，再重新建立链接
 		'send_handshake_errorCallback':function(){
-			this.connect_server(this.url01);
+			this.connect_server(socketUrl.url01);
 		},
 		//socket绑定已登录的用户
 		'bind_login_user':function(loginKey){
@@ -529,6 +541,9 @@ var Communicator = {
 			var _this = this;
 			message=JSON.stringify(message);
 			this.request_handler[this.send_sequence]=callback;
+			//console.log(message)
+			//
+
 			var msg_buffer=this.writeUTF(message,true);
 			var flag=0;
 			flag|=_this.Version.VERSION_1;
@@ -554,6 +569,7 @@ var Communicator = {
 				return;
 			}
 			if (this.ws.readyState == WebSocket.OPEN) {
+				//console.log(send_buffer)
 				this.ws.send(send_buffer);
 			} else {
 				console.log("The socket is not open.");

@@ -4,7 +4,7 @@
        <div class="downloadMainTop">
            <img src="../../assets/img/downLOGO.png" alt="">
        </div>
-       <div class="downloadMainMiddle" v-if="type">{{nolive}}</div>
+       <div class="downloadMainMiddle" v-if="show">{{nolive}}</div>
        <div class="downloadMainMiddle" v-else>{{message}}</div>
        <div class="downloadMainBottom">
             <div class="androidBtn" v-if="(isDevice=='android')">
@@ -29,9 +29,7 @@ export default {
   }),
   created() {
     //do something after creating vue instance
-    if(common['getUrlParam']()){
-      this.type=true;
-    }
+
     this.isDevice = this.$store.getters.getDevice;
   },
 
@@ -56,9 +54,39 @@ export default {
      let winHeight = $(window).height();
      $(".downloadMain").css('marginTop',-winHeight/6);
   },
+  computed:{
+    show(){
+      let flag = this.$store.getters.getonlineflag;
+      //console.log(this.$store.dispatch('setonlineflag',true))
+      //  console.log(this.$route)
+       //if()
+      if(this.$route.query.flag&&flag){
+        //this.$store.dispatch('setonlineflag',true)
+
+        this.$store.dispatch('setShow',true)
+        this.type=true;
+      }else{
+        this.type=false;
+      }
+  //  console.log(this.type)
+     return this.type;
+    }
+  },
   updated() {
     //do something after updating vue instance
 
+  },
+  watch:{
+      // show(val,vals){
+      //   console.log(val)
+      //   if(val){
+      //   //
+      //
+      //    this.type=true;
+      //  }else {
+      //    this.type=false;
+      //  }
+      // }
   }
 }
 </script>
