@@ -98,11 +98,7 @@ export default {
             case socket['gift']:
             // console.log("gift"+data);
             break;
-            case socket['offLive']:
-            _this.$router.push("/index?flag=0");
-            _this.$store.dispatch("setonlineflag",true);
-            break;
-
+            
         }
       }
 
