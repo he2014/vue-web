@@ -12,9 +12,12 @@
                   <span class="fans" v-show="elem['fl']!=0"><i>{{elem['fl']}}</i></span>
                   <img class="vipIMG" v-show="elem['vl']==1" src="../../../assets/img/icon_vip.png"/>
                   <img class="svipIMG" v-show="elem['vl']==2" src="../../../assets/img/svipicon.png" />
-                  <badge v-show="elem['bdg']" :badge="elem['bdg']"></badge>
+                  <badge  :badgemsg="badge"></badge>
                 </div>
-                <chat-message :chatMessage="elem['ms']"></chat-message>
+                <!-- <chat-message :chatMessageData="chatmsg"  ></chat-message> -->
+                <div class="chatMessage" v-html="elem['msg']">
+
+                </div>
            </div>
            <div class="chatListRight">
 
@@ -25,9 +28,9 @@
   </div>
 </template>
 <script>
-import {socket} from "@/pubulic/config";
+import {socket,base} from "@/pubulic/config";
 import badge from "@/components/container/badge"
-import chatMessage from "@/components/container/chatMessage"
+import common from "@/pubulic/common"
 // import {animate,getStyle} from"@/config/mUtils";
 
 export default {
@@ -35,57 +38,109 @@ export default {
   name: "",
   data: () => ({
      chatList:[],
-     datasChat:[]
+     datasChat:[],
+     chatmsg:null,
+     badge:null,
+
 
   }),
   components: {
     badge,
-    chatMessage
+    //chatMessage
   },
   created() {
-    //do something after creating vue instance
+    let url = base.baseUrl;
+    let _this = this;
+    this.$http.get(url+"/data/static/v4/?face").then(function(data){
+      if(data.status>=200&&data.status<300){
+        this.chatmsg = data.body.dataInfo.face.d;
+      //  this.renderMessage(message)
+      }
+    }.bind(this))
+    this.$http.get(url+"/data/static/v4/?badge").then(function(data){
+      if(data.status>=200&&data.status<300){
+        this.url = url+"/resource/";
+        this.badge = data.body.dataInfo.badge.d;
+        // this.badge&&this.badge.forEach(function(val,i){
+        //     if(badge[val])
+        //     this.badgeList.push(this.url+badge[val]["p"])
+        // }.bind(this))
+      }
 
+    }.bind(this))
   },
   mounted() {
-
-    Communicator.init(this.roomID,this.messages,1)
+    this.$nextTick(function(){
+      Communicator.init(this.roomID,this.messages,1)
+    })
     //do something after mounting vue instance
 
   },
   methods: {
+
     messages(data) {
       let _this = this;
       if(data){
         switch(data['mid']){
-
             case socket['chat']:
-
-
             _this.$nextTick(()=>{
+              data.info.msg=_this.renderMessage(data['info']["ms"])
               _this.chatList.push(data['info']);
-              //_this.datasChat.push(data.info.ms);
-              // if(_this.datasChat.length>1){
-              //   _this.datasChat.shift();
-              // }
+              _this.$store.dispatch("setBadgeDate",data.info.bdg);
+            //  _this.$store.dispatch("setChatData",data.info.ms);
+
               if(_this.chatList.length>20){
                 _this.chatList.shift();
 
               }
             })
-
-            //console.log(this.chatList.length)
-            // _this.$nextTick(()=>{
-            //   _this.chatAnimate();
-            // })
-
             break;
             case socket['gift']:
             // console.log("gift"+data);
             break;
+            case socket['offLive']:
+            _this.$router.push("/index?flag=0");
+            _this.$store.dispatch("setonlineflag",true);
+            break;
+
         }
       }
 
     },
+    renderMessage(data) {
+      let _this= this;
+      let url = base.baseUrl+"/resource/";
+      let map ={};
+      let message =this.chatmsg
+     //console.log(this.faceData)
+      message&&message.forEach(function(obj,index){
+        obj['fs'].forEach(function(item,i){
+            map[item['c']] ={"flag":item['f'],"pic":item['p']};
+        })
+      })
+      //console.log(this.$store.getters.getChatData)
+    let str = common.replace_html(data);
+    //console.log(str)
+    for(let val in map){
+      if(val&&map[val]){
+        let  reg = val.replace("[","\\[").replace("]","\\]");
+        //console.log(url+map[val]["pic"])
+        let iSRC = url+map[val]["pic"];
+        str = str.replace(new RegExp(reg,"g"),'<img style="with:32px;height:32px;" src="'+iSRC+'" />');
+
+      }
+    }
+
+  //  this.$nextTick(()=>{
+        return  str;
+  //  })
+
+
+    }
+
+},
+updated() {
+  //do something after updating vue instance
 
 },
   watch:{
@@ -107,6 +162,14 @@ export default {
 }
 </script>
 <style  scoped>
+.chatMessage{
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding-top: 5px;
+  font-size: 24px;
+  word-break: keep-all;
+}
 .vipIMG,.svipIMG{
   width: 32px;
   height: 32px;

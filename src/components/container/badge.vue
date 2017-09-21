@@ -10,26 +10,18 @@ export default {
   data: () => ({
     badgeList:[]
   }),
-  props:['badge','badgeDatas'],
+  props:['badgemsg'],
   created(){
-  console.log(this.badgeDatas)
-    let url = base.baseUrl;
-    this.$http.get(url+"/data/static/v4/?badge").then(function(data){
-    //  console.log(data)
-      if(data.status>=200&&data.status<300){
-        this.url = url+"/resource/";
-        let badge = data.body.dataInfo.badge.d;
-        this.badge&&this.badge.forEach(function(val,i){
-            if(badge[val])
-            this.badgeList.push(this.url+badge[val]["p"])
-        }.bind(this))
-      }
-
-    }.bind(this))
-    //do something after creating vue instance
+  //  console.log(this.badge)
 
   },
   mounted() {
+    let badge = this.$store.getters.getBageData;
+    this.url = base.baseUrl+"/resource/";
+    badge&&badge.forEach(function(val,i){
+        if(this.badgemsg[val])
+        this.badgeList.push(this.url+this.badgemsg[val]["p"])
+    }.bind(this))
     //do something after mounting vue instance
 
   }

@@ -9,7 +9,9 @@ const state = {
   device:"",
 	isShow:false,
   headerShow:true,
-  nolineflags:false
+  nolineflags:false,
+  badgeDataInit:null,
+  chatMessageInit:null
 }
 
 export default new Vuex.Store({

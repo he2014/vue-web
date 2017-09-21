@@ -11,8 +11,9 @@ export const pid = ()=>{
       return utm_source&&utm_source=="snaptube"?100000101:pid?pid:0;
 };
 export const socket ={
-  chat:300006,
-  gift:300008,
-  microsOn:710005,
-  microsOff:710006
+  chat:300006,//聊天
+  gift:300008,//礼物
+  microsOn:710005,//上麦
+  microsOff:710006,//下麦
+  offLive:200002//关播
 }

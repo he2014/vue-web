@@ -5,6 +5,7 @@
   </div>
 </template>
 <script>
+
 import {base} from "@/pubulic/config";
 import common from "@/pubulic/common"
 export default {
@@ -13,16 +14,15 @@ export default {
     messages:"",
     arrs:[]
   }),
-  props: ['chatMessage','chatMAIN','chats'],
+  props: ['chatMessage','chatMessageData'],
   created(){
-      let url = base.baseUrl;
-      let _this = this;
-      this.$http.get(url+"/data/static/v4/?face").then(function(data){
-        if(data.status>=200&&data.status<300){
-          let message = data.body.dataInfo.face.d;
-          this.renderMessage(message)
-        }
-      }.bind(this))
+    this.renderMessage(this.chatMessageData);
+  },
+  mounted() {
+    //console.log(this.chatMessage)
+    //console.log(this.chatMessageData)
+    //do something after mounting vue instance
+
   },
   methods: {
     renderMessage(message) {
@@ -35,8 +35,8 @@ export default {
             map[item['c']] ={"flag":item['f'],"pic":item['p']};
         })
       })
-
-    let str = common.replace_html(this.chatMessage);
+      console.log(this.$store.getters.getChatData)
+    let str = common.replace_html(this.$store.getters.getChatData);
     //console.log(str)
     for(let val in map){
       if(val&&map[val]){
@@ -48,17 +48,20 @@ export default {
         str = str.replace(new RegExp(reg,"g"),'<img style="with:32px;height:32px;" src="'+iSRC+'" />');
 
       }
-
     }
-    this.$nextTick(()=>{
+
+  //  this.$nextTick(()=>{
         _this.messages = str;
-    })
+  //  })
 
 
     }
   },
 
   watch:{
+    'this.$store.getters.getChatData'(){
+
+    }
     // messages:{
     //   handler(){
     //   this.$nextTick(()=>{

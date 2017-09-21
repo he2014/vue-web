@@ -156,7 +156,7 @@ var Communicator = {
 			}
 		},
 		'init':function(container,msg,rte){
-			console.log(msg)
+			//console.log(msg)
       this.socket_message = msg;
 			this.roomId = container;
 

@@ -1,4 +1,4 @@
-import { DEVICE,ISSHOW,ONLINEFLAG} from "@/store/mutation-types";
+import { DEVICE,ISSHOW,ONLINEFLAG,BADGE,CHATMASSAGE} from "@/store/mutation-types";
 export default {
    DEVICE(state,device){
      state.device = device;
@@ -11,5 +11,13 @@ export default {
    },
    ONLINEFLAG(state,val){
      state.nolineflags=val;
-   }
+   },
+   BADGE(state,val){
+     state.badgeDataInit = val;
+   },
+   CHATMASSAGE(state,val){
+     state.chatMessageInit = val;
+   },
+
+
 }

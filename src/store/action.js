@@ -1,4 +1,4 @@
-import { DEVICE,ISSHOW,ONLINEFLAG} from "@/store/mutation-types"
+import { DEVICE,ISSHOW,ONLINEFLAG,BADGE,CHATMASSAGE} from "@/store/mutation-types"
 export const setDevice =({commit,state},val)=>{
   commit("DEVICE",val);
 };
@@ -10,4 +10,10 @@ export const setHeader = ({commit,state},value)=>{
 }
 export const setonlineflag =({commit,state},val)=>{
   commit('ONLINEFLAG',val);
+}
+export const setBadgeDate = ({commit,state},val)=>{
+  commit('BADGE',val);
+}
+export const setChatData =({commit,state},val)=>{
+  commit('CHATMASSAGE',val);
 }
