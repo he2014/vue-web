@@ -75,7 +75,7 @@ export default {
       accept:"Accept",
       roomId:null,
       url:"",
-      flags:false
+
   }),
   components:{
     newHeader,
@@ -94,9 +94,9 @@ export default {
     let url = base.baseUrl;
 
     this.$http.get(url+"/service/room/v3/info/h5/"+this.roomId).then(function(data){
-      //console.log(data)
       if(data.status>=200&&data.status<300){
         if(data.body.code==0)this.mas = data['body']['dataInfo'];
+        this.videoRender();
         this.url = url+"/resource/";
         if(this.mas.flg !=1){
           this.$router.push("/index?flag=0");
@@ -117,11 +117,7 @@ export default {
   //console.log(this.$route)
   },
   mounted() {
-  //  console.log(this.$route)
-    // )
-    //console.log(this.roomId)
-      //this.$router.push('socket')
-    this.videoRender();
+
   },
   // beforeRouteLeave(to,from,next){
   //   console.log(to)
@@ -130,10 +126,15 @@ export default {
   //
   // },
 methods: {
+  getVideoUrl(){
+
+  },
   setErrorImg(e){
+    //绑定默认图片
     e.target.setAttribute('src',"static/img/recommend/head.png");
   },
   videoRender(){
+    console.log(this.mas)
     let _this =this;
     let  palyInfo ={
               "controls":false,
@@ -143,9 +144,8 @@ methods: {
               "preload":"none",
               "modes":[{"type":"html5"}],
               "autostart":"false",
-              file:"http://vjs.zencdn.net/v/oceans.mp4",
-              //"file":"http://streamerhls.7nujoom.com/live/stream_"+_this.roomId+"/playlist.m3u8",
-            //  "file":"http://streamerhls.7nujoom.com/live/haahi_"+_this.roomId+"/playlist.m3u8",
+              "file":common["getVideoAddress"](this.mas['videoAddr'],this.mas["prefixion"].split(".")[0]),
+            //  file:"http://vjs.zencdn.net/v/oceans.mp4",
               "height":"100%",
               "width":"100%",
               "volume":100,
@@ -163,9 +163,7 @@ methods: {
                     //  _this.$store.dispatch("setonlineflag",true);
 									},
     				      onReady: function() {
-                    //alert(1)
-                      let video = document.querySelector('video');
-                       enableInlineVideo(video);
+                       enableInlineVideo(_this.$el.querySelector('video'));
             				},
             				onPlay: function() {
             					console.log("开始播放!!!");
@@ -186,8 +184,7 @@ methods: {
        "x5-video-player-type": "h5",
        "x5-video-player-fullscreen": "true",
        'airplay':"airplay",
-       "x-webkit-airplay":"true",
-       "loop":true
+       "x-webkit-airplay":"true" 
      });
      //alert($("video").attr('src'))
     this.video.play();

@@ -15,5 +15,5 @@ export const socket ={
   gift:300008,//礼物
   microsOn:710005,//上麦
   microsOff:710006,//下麦
-  offLive:200002//关播
+  offLive:300005//关播
 }

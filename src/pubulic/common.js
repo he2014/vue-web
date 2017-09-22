@@ -47,11 +47,18 @@ export default{
           }
           return arr2;
     },
-    replace_html:function(str) {//替换下列符号
+    replace_html:(str) =>{//替换下列符号
 		if (!str) {
 			return null;
 		}
 		return $.trim(str).replace(new RegExp("&", "g"), "&amp;").replace(new RegExp("<", "g"), "&lt;").replace(new RegExp(">", "g"), "&gt;")
-	}
+	},
+  getVideoAddress:(url,prefixion)=>{
+    let video_address = "http://streamer.sympl.tv/upwr_hls/"+prefixion+"/playlist.m3u8";
+    if(url && url.indexOf('streamer.7nujoom.com')> -1){
+        video_address = "http://streamerhls.7nujoom.com/live/"+prefixion+"/playlist.m3u8";
+    }
+    return video_address;
+}
 
 }

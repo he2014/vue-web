@@ -107,6 +107,7 @@ export default {
   created() {
     if(this.$route.path==="/index"&&Communicator['ws']){
       //Communicator.init(this.$store.getters.getChatData,"",1,false)
+      //如果socket实例存在,刷新页面清出实例；
       window.location.reload()
     }
 

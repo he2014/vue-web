@@ -5,7 +5,7 @@
 
       </div>
       <div ref="chats" class="chats">
-      <div class="chatList" v-for="(elem,index) in uniques(chatList)" :key="index">
+      <div class="chatList" v-for="(elem,index) in chatList" :key="index">
            <div class="chatListLeft">
                 <div class="chatTop">
                   <span :class="elem['vl']==0?'username':elem['vl']==1?'usernamevip':'usernamesvip'">{{elem['nn']}}</span>
@@ -38,10 +38,10 @@ export default {
   props:['roomID'],
   name: "",
   data: () => ({
-     chatList:[],
+     chatList:[],//消息
      datasChat:[],
-     chatmsg:null,
-     badge:null,
+     chatmsg:null,//表情
+     badge:null,//徽章
 
 
   }),
@@ -63,35 +63,19 @@ export default {
       if(data.status>=200&&data.status<300){
         this.url = url+"/resource/";
         this.badge = data.body.dataInfo.badge.d;
-        // this.badge&&this.badge.forEach(function(val,i){
-        //     if(badge[val])
-        //     this.badgeList.push(this.url+badge[val]["p"])
-        // }.bind(this))
       }
 
     }.bind(this))
   },
   mounted() {
-    //this.$nextTick(function(){
-      ///.log(this.$route)
-      //this.$store.dispatch("setChatData",this.roomID);
-    //console.log(t)
-    //let =0;
-    // console.log(this.$store.getters.getChatData)
-    // if(this.$store.getters.getChatData){
+    //创建socket实例，并回调消息
       Communicator.init(this.roomID,this.messages,1,true)
-  //  }
 
     //s})
     //do something after mounting vue instance
 
   },
   methods: {
-   uniques(arr){
-     //console.log(this.chatList[1]==this.chatList[2])
-      return Array.from(new Set(arr));
-   },
-
     messages(data) {
       let _this = this;
       if(data){
@@ -106,6 +90,10 @@ export default {
             break;
             case socket['gift']:
             break;
+            case socket['offLive']:
+              this.$router.push("/index?flag=0");
+              break;
+
 
         }
       }
@@ -123,9 +111,9 @@ export default {
             map[item['c']] ={"flag":item['f'],"pic":item['p']};
         })
       })
-      //console.log(this.$store.getters.getChatData)
+      //console.log(this.$store.getters.getChatData)g
+      //消息中的表情替换
     let str = common.replace_html(data);
-    //console.log(str)
     for(let val in map){
       if(val&&map[val]){
         let  reg = val.replace("[","\\[").replace("]","\\]");
@@ -139,24 +127,22 @@ export default {
     }
 
 },
-  watch:{
+  watch:{//监听数据变化，滚动条更新和删除过多节点
     chatList:{
       handler(newval,oldval){
       this.$nextTick(()=>{
+
             this.$refs.chatMain.scrollTop = this.$refs.chats.scrollHeight;
             if(this.$el.querySelectorAll(".chatList").length>=20){
               this.$el.querySelector(".chatList").remove();
             }
       })
     },
-    deep:true,
-    $route(){
-
-    }
+    deep:true
 
 
 
-  },
+  }
 
   }
 
