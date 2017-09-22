@@ -6,6 +6,7 @@ import liveMain from "@/components/container/lives/liveMain";
 import indexcontainer from "@/components/container/indexcontainer";
 import videoMain from "@/components/container/video/video";
 import chatMain from "@/components/container/chat/chat";
+import liveSocket from "@/components/container/lives/liveSocket";
 
 Vue.use(Router)
 
@@ -27,7 +28,16 @@ export default new Router({
         redirect:"/index"
       },{
         path:"/live",
-        component:liveMain
+        component:liveMain,
+        mate:{keepAlive:false},
+        children:[
+          {
+          path:"socket",
+          component:liveSocket,
+          name:"socket"
+        }
+
+        ]
       },{
         path:"/video",
         component:videoMain

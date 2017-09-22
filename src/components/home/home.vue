@@ -1,7 +1,9 @@
 <template>
   <div id="" class="home">
       <popup v-show="showpop" ></popup>
+      <!-- <keep-alive> -->
       <router-view ></router-view>
+      <!-- </keep-alive> -->
   </div>
 </template>
 <script>

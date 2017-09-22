@@ -14,7 +14,7 @@
             </div>
           </div>
           <div class="ul">
-              <router-link tag="p" :to="{path:'live',query:{ sf:item['ri'],pid:pids}}" v-for="(item,index) in list" :key='index'>
+              <router-link  tag="p" :to="{path:'live/socket',query:{ sf:item['ri'],pid:pids}}" v-for="(item,index) in list" :key='index'>
                   <img class="poster" v-bind:src="url+item['ci']" @error="setErrorImg"/>
                   <span class="isOnline" v-if="item['st']==1">
                        <em class="onLive" v-if="item['sti']">
@@ -83,6 +83,7 @@ import headerContent from '../header/header'
 import footers from '../footer/footer'
 import {base,pid} from "@/pubulic/config";
 import common from"@/pubulic/common";
+import { Communicator} from "@/pubulic/socket";
 export default {
   name: "container",
   data: () => ({
@@ -95,12 +96,20 @@ export default {
         chatLock:false,
         videoLock:false,
         show:false,
-        livedefaulte:""
+        livedefaulte:"",
+        num :0
 
   }),
   components: {
     headerContent,
     footers
+  },
+  created() {
+    if(this.$route.path==="/index"&&Communicator['ws']){
+      //Communicator.init(this.$store.getters.getChatData,"",1,false)
+      window.location.reload()
+    }
+
   },
 mounted() {
      let url =base.baseUrl;
@@ -129,7 +138,7 @@ mounted() {
 
     }.bind(this));
     this.$http.get(url+"/video/h5/index").then(function(data){
-        console.log(data)
+        //console.log(data)
     }.bind(this))
 
     //   this.$http.get("/news/index").then(function(res){
@@ -155,12 +164,27 @@ mounted() {
 //   //do something after mounting vu
  },
  methods:{
+   nextUum(){
+     console.log(this.num++)
+     return this.num++;
+   },
    setErrorImg(e){
-     e.target.setAttribute('src',"static/img/recommend/head.png");
+     e.target.setAttribute('src',"static/img/recommend/head.png")
+    // console.log()
+     //errorImg(e,'static/img/header.png')
+
    },
    showPop(){
      this.$store.dispatch("setShow",true);
      this.$store.dispatch("setonlineflag",false);
+   }
+ },
+ watch:{
+   '$route'(){
+
+     if(this.$route){
+
+     }
    }
  }
 

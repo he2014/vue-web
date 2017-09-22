@@ -5,7 +5,7 @@
 
       </div>
       <div ref="chats" class="chats">
-      <div class="chatList" v-show="chatList.length!=0" v-for="elem in chatList" :key="elem.key">
+      <div class="chatList" v-for="(elem,index) in uniques(chatList)" :key="index">
            <div class="chatListLeft">
                 <div class="chatTop">
                   <span :class="elem['vl']==0?'username':elem['vl']==1?'usernamevip':'usernamesvip'">{{elem['nn']}}</span>
@@ -31,6 +31,7 @@
 import {socket,base} from "@/pubulic/config";
 import badge from "@/components/container/badge"
 import common from "@/pubulic/common"
+import { Communicator} from "@/pubulic/socket";
 // import {animate,getStyle} from"@/config/mUtils";
 
 export default {
@@ -49,6 +50,7 @@ export default {
     //chatMessage
   },
   created() {
+    this.chatList = [];
     let url = base.baseUrl;
     let _this = this;
     this.$http.get(url+"/data/static/v4/?face").then(function(data){
@@ -70,35 +72,41 @@ export default {
     }.bind(this))
   },
   mounted() {
-    this.$nextTick(function(){
-      Communicator.init(this.roomID,this.messages,1)
-    })
+    //this.$nextTick(function(){
+      ///.log(this.$route)
+      //this.$store.dispatch("setChatData",this.roomID);
+    //console.log(t)
+    //let =0;
+    // console.log(this.$store.getters.getChatData)
+    // if(this.$store.getters.getChatData){
+      Communicator.init(this.roomID,this.messages,1,true)
+  //  }
+
+    //s})
     //do something after mounting vue instance
 
   },
   methods: {
+   uniques(arr){
+     //console.log(this.chatList[1]==this.chatList[2])
+      return Array.from(new Set(arr));
+   },
 
     messages(data) {
       let _this = this;
       if(data){
         switch(data['mid']){
             case socket['chat']:
-            _this.$nextTick(()=>{
+            //.log(data)
+            // _this.$nextTick(()=>{
               data.info.msg=_this.renderMessage(data['info']["ms"])
               _this.chatList.push(data['info']);
               _this.$store.dispatch("setBadgeDate",data.info.bdg);
-            //  _this.$store.dispatch("setChatData",data.info.ms);
-
-              if(_this.chatList.length>20){
-                _this.chatList.shift();
-
-              }
-            })
+               // })
             break;
             case socket['gift']:
-            // console.log("gift"+data);
             break;
-            
+
         }
       }
 
@@ -109,6 +117,7 @@ export default {
       let map ={};
       let message =this.chatmsg
      //console.log(this.faceData)
+
       message&&message.forEach(function(obj,index){
         obj['fs'].forEach(function(item,i){
             map[item['c']] ={"flag":item['f'],"pic":item['p']};
@@ -126,29 +135,25 @@ export default {
 
       }
     }
-
-  //  this.$nextTick(()=>{
         return  str;
-  //  })
-
-
     }
-
-},
-updated() {
-  //do something after updating vue instance
 
 },
   watch:{
     chatList:{
-      handler(){
+      handler(newval,oldval){
       this.$nextTick(()=>{
-          //console.log(this.$el.querySelector(".chatMain"))
             this.$refs.chatMain.scrollTop = this.$refs.chats.scrollHeight;
-            //console.log(this.chatList)
+            if(this.$el.querySelectorAll(".chatList").length>=20){
+              this.$el.querySelector(".chatList").remove();
+            }
       })
     },
-    deep:true
+    deep:true,
+    $route(){
+
+    }
+
 
 
   },

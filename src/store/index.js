@@ -11,7 +11,7 @@ const state = {
   headerShow:true,
   nolineflags:false,
   badgeDataInit:null,
-  chatMessageInit:null
+  chatMessageInit:true,
 }
 
 export default new Vuex.Store({

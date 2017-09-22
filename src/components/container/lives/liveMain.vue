@@ -6,7 +6,10 @@
                 <div class="roomMain">
 
                 <div id='player' class="player"></div>
-                <live-socket :roomID="roomId"></live-socket>
+                    <keep-alive>
+                    <!-- <live-socket  v-if="flags" :roomID="roomId"></live-socket> -->
+                      <router-view :roomID="roomId"></router-view>
+                      </keep-alive>
                 <div>
                   <div class="posterFlow">
                      <div class="hotMessage">
@@ -71,7 +74,8 @@ export default {
       message:"This Broadcaster is inviting you to chat! Download 7Nujoom to follow her!",
       accept:"Accept",
       roomId:null,
-      url:""
+      url:"",
+      flags:false
   }),
   components:{
     newHeader,
@@ -80,6 +84,11 @@ export default {
     liveSocket
   },
   created() {
+    //alert(8)
+
+
+//window.location.reload();
+  //this.$store.dispatch("setChatData",true);
     this.roomId = this.$route.query.sf;
 
     let url = base.baseUrl;
@@ -108,10 +117,18 @@ export default {
   //console.log(this.$route)
   },
   mounted() {
+  //  console.log(this.$route)
     // )
     //console.log(this.roomId)
+      //this.$router.push('socket')
     this.videoRender();
   },
+  // beforeRouteLeave(to,from,next){
+  //   console.log(to)
+  //     this.flags = false;
+  //     //this.$router.push("/index");
+  //
+  // },
 methods: {
   setErrorImg(e){
     e.target.setAttribute('src',"static/img/recommend/head.png");
@@ -126,16 +143,16 @@ methods: {
               "preload":"none",
               "modes":[{"type":"html5"}],
               "autostart":"false",
-              // file:"http://vjs.zencdn.net/v/oceans.mp4",
+              file:"http://vjs.zencdn.net/v/oceans.mp4",
               //"file":"http://streamerhls.7nujoom.com/live/stream_"+_this.roomId+"/playlist.m3u8",
-             "file":"http://streamerhls.7nujoom.com/live/haahi_"+_this.roomId+"/playlist.m3u8",
+            //  "file":"http://streamerhls.7nujoom.com/live/haahi_"+_this.roomId+"/playlist.m3u8",
               "height":"100%",
               "width":"100%",
               "volume":100,
               "events":{
                     onComplete: function() {
-                    _this.$router.push("/index?flag=0");
-                    _this.$store.dispatch("setonlineflag",true);
+                    // _this.$router.push("/index?flag=0");
+                    // _this.$store.dispatch("setonlineflag",true);
     				      },
     				      onVolume: function() {
                     console.log("声音大小改变!!!");
@@ -170,9 +187,17 @@ methods: {
        "x5-video-player-fullscreen": "true",
        'airplay':"airplay",
        "x-webkit-airplay":"true",
+       "loop":true
      });
      //alert($("video").attr('src'))
     this.video.play();
+    this.flags = true;
+
+    //this.flags = ;
+    // if(!this.$store.getters.getChatData){
+       //this.$store.dispatch("setChatData",true);
+    //
+    // }
     $("#livePoster ").hide();
     $('.liveMain').css('height', $(window).height());
     //alert(this.video.getAudioTracks())
@@ -182,6 +207,11 @@ methods: {
     this.$store.dispatch('setonlineflag',false)
   }
 },
+watch:{
+  $route(to,from){
+    console.log(from)
+  }
+}
 }
 </script>
 <style scoped>
