@@ -14,9 +14,9 @@
             </div>
           </div>
           <div class="ul">
-              <router-link  tag="p" :to="{path:'live/socket',query:{ sf:item['ri'],pid:pids}}" v-for="(item,index) in list" :key='index'>
+              <router-link  tag="p" :to="{path:'/socket',query:{ sf:item['ri'],pid:pids}}" v-for="(item,index) in list" :key='index'>
                   <img class="poster" v-bind:src="url+item['ci']" @error="setErrorImg"/>
-                  <span class="isOnline" v-if="item['st']==1">
+s                  <span class="isOnline" v-if="item['st']==1">
                        <em class="onLive" v-if="item['sti']">
                           <i><img src="../../assets/img/live.gif" /></i>
                           <b><span>{{item['ol']}}</span></b>

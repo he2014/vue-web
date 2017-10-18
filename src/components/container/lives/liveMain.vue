@@ -184,7 +184,7 @@ methods: {
        "x5-video-player-type": "h5",
        "x5-video-player-fullscreen": "true",
        'airplay':"airplay",
-       "x-webkit-airplay":"true" 
+       "x-webkit-airplay":"true"
      });
      //alert($("video").attr('src'))
     this.video.play();
@@ -289,6 +289,10 @@ color:#fff;
   width: 100%;
   height: 100%;
 }
+.livePoster{
+  z-index: 88;
+}
+
 .posterHotHerader{
   width: 68px;
   height: 68px;

@@ -1,4 +1,28 @@
 <template>
+  <div class="soketMain">
+    <ul class="gitMain">
+      <transition-group name="gift" tag="li" class="giftLi">
+        <div class="giftList" v-for="(item,index) in giftGive " :key="index"  >
+          <div class="giftUser">
+              <div class="giftHeader">
+                <img :src="url+item.info['hp']" @error="setErrorImg"/>
+              </div>
+              <div class="giftName">
+                {{item['info']['nn']}}
+              </div>
+              <div class="giftPic">
+                 <img :src="url+item.info.gpic" />
+              </div>
+
+            </div>
+              <div class="giftNumber" >
+                  <i>x</i>
+                  <span>{{item['info']['gnum']}}</span>
+              </div>
+        </div>
+      </transition-group>
+    </ul>
+
   <div class="liveSocket">
     <div class="chatMain" id="chatMain" ref="chatMain">
       <div class="kong">
@@ -26,6 +50,7 @@
     </div>
     </div>
   </div>
+  </div>
 </template>
 <script>
 import {socket,base} from "@/pubulic/config";
@@ -42,6 +67,9 @@ export default {
      datasChat:[],
      chatmsg:null,//表情
      badge:null,//徽章
+     giftList:[],
+     giftGive:[],
+     //imgUrl:""
 
 
   }),
@@ -52,6 +80,7 @@ export default {
   created() {
     this.chatList = [];
     let url = base.baseUrl;
+  //  this.imgUrl = url+"/resource/"
     let _this = this;
     this.$http.get(url+"/data/static/v4/?face").then(function(data){
       if(data.status>=200&&data.status<300){
@@ -65,10 +94,32 @@ export default {
         this.badge = data.body.dataInfo.badge.d;
       }
 
+    }.bind(this));
+    this.$http.get(url+"/data/mobile/v3/?gift&requsetType=1").then(function(data){
+      if(data.status>=200&&data.status<300){
+        this.giftData = data.body.dataInfo.gift.d;
+        this.giftResource =[];
+        let item = {}
+        this.giftData.forEach(function(val,index){
+          // console.log(val)
+          // console.log(val['id'])
+
+          // this.giftResource.push({
+          //   val['id']:val['gp']
+          // })
+          item[val['id']] = val['gp']
+
+        }.bind(this))
+        this.giftResource.push(item)
+      //  console.log(this.giftResource)
+      }
     }.bind(this))
   },
   mounted() {
     //创建socket实例，并回调消息
+    // let promise = new Promise(function(){
+    //
+    // })
       Communicator.init(this.roomID,this.messages,1,true)
 
     //s})
@@ -89,6 +140,15 @@ export default {
                // })
             break;
             case socket['gift']:
+              _this.renderGit(data)
+              _this.giftList.push(data);
+              setTimeout(function(){
+                if(_this.giftList.length>0){
+                  _this.giftList[0]['info']['gpic']=_this.giftResource[0][_this.giftList[0]['info']['gid']]
+                  _this.giftGive.push(_this.giftList[0]);
+                  _this.giftList.shift();
+                }
+              },3000)
             break;
             case socket['offLive']:
               this.$router.push("/index?flag=0");
@@ -97,6 +157,17 @@ export default {
 
         }
       }
+
+    },
+    setErrorImg(e){
+      e.target.setAttribute('src',"static/img/recommend/head.png")
+     // console.log()
+      //errorImg(e,'static/img/header.png')
+
+    },
+    renderGit(data){
+      //  console.log(data)
+
 
     },
     renderMessage(data) {
@@ -131,10 +202,11 @@ export default {
     chatList:{
       handler(newval,oldval){
       this.$nextTick(()=>{
-
             this.$refs.chatMain.scrollTop = this.$refs.chats.scrollHeight;
             if(this.$el.querySelectorAll(".chatList").length>=20){
               this.$el.querySelector(".chatList").remove();
+              this.chatList.shift();
+
             }
       })
     },
@@ -149,6 +221,86 @@ export default {
 }
 </script>
 <style  scoped>
+.gitMain{
+  position: absolute;
+  top: 490px;
+  height: 200px;
+  width: 100%;
+  z-index: 59z;
+  color: #fff;
+}
+.gitMain li{
+  width: 100%;
+  height: 200px;
+  position: relative;
+}
+.giftList{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+}
+.giftUser{
+height: 100%;
+width: 400px;
+display: flex;
+align-items: center;
+justify-content: flex-start;
+background: #f5a623;
+border-radius: 44px;
+padding-right: 15px;
+font-size: 24px;
+position: relative;
+
+}
+.giftPic img{
+  height: 72px;
+  position: absolute;
+  top:50%;
+  margin-top: -36px;
+  right: 20px;
+}
+.giftName{
+  margin: 0 20px;
+  overflow: hidden;
+  max-width: 200px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.giftNumber i{
+  font-size: 48px;
+font-style: italic;
+color: #f5a623;
+padding-right: 15px;
+padding-left: 5px;
+line-height: 60px;
+text-shadow: 0px 2px 2px rgba(255,255,255,1);
+}
+.giftNumber span{
+  font-size: 68px;
+color: #f5a623;
+text-shadow: 0px 2px 2px rgba(255,255,255,1);
+}
+.giftHeader{
+  width:88px;
+  height: 88px;
+
+}
+.giftHeader img{
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+}
+.soketMain{
+  width: 100%;
+  height: 100%;
+  position:absolute;
+  left: 0;
+  bottom: 0;
+}
 .chatMessage{
   display: flex;
   justify-content: flex-start;

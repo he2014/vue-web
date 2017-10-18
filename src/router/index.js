@@ -30,9 +30,10 @@ export default new Router({
         path:"/live",
         component:liveMain,
         mate:{keepAlive:false},
+        hidden:true,
         children:[
           {
-          path:"socket",
+          path:"/socket",
           component:liveSocket,
           name:"socket"
         }

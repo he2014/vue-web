@@ -25,6 +25,10 @@ export default {
 </script>
 
 <style>
+@@font-face {
+   font-family: "HelveticaNeue";
+   src:url("/src/assets/font/HelveticaNeue.dfont");
+}
 html, body, div, span, applet, object, iframe, h1, h2, h3,
 h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address,
 big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp,
@@ -39,7 +43,7 @@ thead, tr, th, td ,i,span,img,b{
   font-weight: inherit;
   font-style: normal;
   font-size: 100%;
-  font-family: HelveticaNeue !important;
+  font-family: HelveticaNeue;
   vertical-align: baseline;
   list-style: none;
   text-decoration:none;
