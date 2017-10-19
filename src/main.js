@@ -8,7 +8,9 @@ import store from './store/';
 import vueResource from 'vue-resource';
 import Es6Promise from 'es6-promise';
 // import mockjs from "@/pubulic/mock.js";
-
+// import axios from 'axios'
+// axios.defaults.timeout =10000;
+// Vue.prototype.$http = axios
 Es6Promise.polyfill();
 if ('addEventListener' in document) {
     document.addEventListener('DOMContentLoaded', function() {
