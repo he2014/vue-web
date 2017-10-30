@@ -140,6 +140,7 @@ export default {
                // })
             break;
             case socket['gift']:
+                console.log(data)
               _this.renderGit(data)
               _this.giftList.push(data);
               setTimeout(function(){
@@ -233,11 +234,15 @@ export default {
   width: 100%;
   height: 200px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
 }
 .giftList{
   position: absolute;
   width: 100%;
-  height: 100%;
+  height:88px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
